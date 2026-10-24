@@ -144,3 +144,12 @@ def test_round_trip_renders_the_same_claim_rows(tmp_path) -> None:
     ]
     assert view["gate"].startswith("Gate: APPROVE.")
     assert view["provider_host"] == "api.deepseek.com"
+    assert view["rejected"] == [
+        {
+            "claim_id": "c3",
+            "statement": "Change CHG0045812 approved this activity.",
+            "reason": "Authorization is not checked in this demo.",
+            "row_id": "",
+        }
+    ]
+    assert view["evidence_claim_ids"] == ["c1", "c2"]

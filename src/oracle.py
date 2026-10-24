@@ -23,6 +23,14 @@ from titanlog.adapters.generic_jsonl import coerce_event_code, host_key_for
 # Same token rule as detectors.encoded_powershell: "-enc" is not "-Encoding".
 _ENC = re.compile(r"(?:^|[^a-z0-9])-enc(?:odedcommand)?(?:[^a-z0-9]|$)")
 _B64 = re.compile(r"frombase64string")
+# Process creation can be the dump itself: rundll32 comsvcs.dll MiniDump, or procdump against lsass.
+_LSASS_DUMP = re.compile(
+    r"comsvcs\.dll.*minidump"
+    r"|procdump(?:64)?(?:\.exe)?.*lsass"
+    r"|minidumpwritedump.*lsass"
+    r"|lsass.*minidump",
+    re.IGNORECASE | re.DOTALL,
+)
 
 Status = Literal["VERIFIED", "REJECTED", "UNVERIFIABLE"]
 
@@ -159,8 +167,15 @@ def _process_executed(claim: Claim, row: Any) -> ClaimVerdict:
 
 
 def _lsass_access(claim: Claim, row: Any) -> ClaimVerdict:
-    if _code(row) != 10:
-        return _verdict(claim, "REJECTED", "Event is not a process-access event (10).")
+    code = _code(row)
+    if code in {1, 4688}:
+        return _lsass_dump_process(claim, row, code)
+    if code != 10:
+        return _verdict(
+            claim,
+            "REJECTED",
+            "Event is not a process-access event (10) or a process creation that dumps LSASS.",
+        )
     fields = _values(row)
     if "lsass" not in fields["target"].casefold():
         return _verdict(claim, "REJECTED", "Target image is not lsass.")
@@ -184,6 +199,24 @@ def _lsass_access(claim: Claim, row: Any) -> ClaimVerdict:
     else:
         reason = "Event 10 targets lsass from rundll32 or comsvcs."
     return _verdict(claim, "VERIFIED", reason)
+
+
+def _lsass_dump_process(claim: Claim, row: Any, code: int) -> ClaimVerdict:
+    """Verify a dump cited on Sysmon 1 or Security 4688, not only on Event 10."""
+    command = _values(row)["command_line"]
+    if _LSASS_DUMP.search(command) is None:
+        return _verdict(claim, "REJECTED", "Process creation command line does not dump LSASS.")
+    texts = _cited(claim, row, ("command_line", "image"))
+    if texts is None:
+        return _verdict(claim, "REJECTED", "Cited field is not the image or command line.")
+    needle = _needle(claim)
+    if needle is not None and not _contains(texts, needle):
+        return _verdict(claim, "REJECTED", "Cited text is not in the image or command line.")
+    return _verdict(
+        claim,
+        "VERIFIED",
+        f"Event {code} command line dumps LSASS memory.",
+    )
 
 
 def _service_installed(claim: Claim, row: Any) -> ClaimVerdict:

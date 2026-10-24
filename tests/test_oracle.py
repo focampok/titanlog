@@ -226,6 +226,66 @@ def test_allowlist_ticket_verifies_authorization() -> None:
     assert other_ticket.status == "REJECTED"
 
 
+def test_process_creation_minidump_verifies_lsass_access() -> None:
+    events = _comsvcs()
+    security = _minidump(events, 4688)
+    assert security.process_command_line is not None
+    assert "comsvcs.dll" in security.process_command_line
+    assert "MiniDump" in security.process_command_line
+    cached_shape = _claim(
+        "c7",
+        ClaimType.LSASS_ACCESS,
+        "rundll32.exe used comsvcs.dll MiniDump to dump LSASS memory.",
+        host="workstation5",
+        user="wardog",
+        row_id=security.row_id,
+        field="process_command_line",
+        expected_value_substring="comsvcs.dll MiniDump",
+    )
+    verdict = verify_claim(cached_shape, events)
+    assert verdict.status == "VERIFIED"
+    assert "4688" in verdict.reason
+
+    sysmon = _minidump(events, 1)
+    sysmon_claim = _claim(
+        "sysmon",
+        ClaimType.LSASS_ACCESS,
+        "rundll32.exe used comsvcs.dll MiniDump to dump LSASS memory.",
+        host=sysmon.host_name,
+        user=sysmon.user_name,
+        row_id=sysmon.row_id,
+        field="process_command_line",
+        expected_value_substring="comsvcs.dll MiniDump",
+    )
+    assert verify_claim(sysmon_claim, events).status == "VERIFIED"
+
+    procdump = _event(
+        row_id="procdump",
+        event_code=1,
+        process_command_line=r"C:\Tools\procdump64.exe -accepteula -ma lsass.exe C:\Temp\lsass.dmp",
+    )
+    procdump_claim = _claim(
+        "procdump",
+        ClaimType.LSASS_ACCESS,
+        "procdump dumped lsass.",
+        row_id="procdump",
+        field="process_command_line",
+        expected_value_substring="lsass.exe",
+    )
+    assert verify_claim(procdump_claim, [procdump]).status == "VERIFIED"
+
+    notepad = _event(row_id="notepad", event_code=4688, process_command_line="notepad.exe readme.txt")
+    notepad_claim = _claim(
+        "notepad",
+        ClaimType.LSASS_ACCESS,
+        "notepad dumped lsass.",
+        row_id="notepad",
+        field="process_command_line",
+        expected_value_substring="notepad",
+    )
+    assert verify_claim(notepad_claim, [notepad]).status == "REJECTED"
+
+
 def test_lsass_rule_is_dangerous_access_or_rundll32_source() -> None:
     target = r"C:\Windows\System32\lsass.exe"
     dangerous = _event(

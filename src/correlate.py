@@ -28,6 +28,7 @@ class GateRecommendation(BaseModel):
     level: Literal["AUTO", "APPROVE", "DENY"]
     action: str
     reason: str
+    excluded_claim_ids: list[str] = Field(default_factory=list)
 
 
 class Incident(BaseModel):

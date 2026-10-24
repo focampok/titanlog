@@ -85,24 +85,36 @@ def investigation_view(source: Incident | Mapping[str, Any]) -> dict[str, Any]:
     model = str(data.get("model") or incident.get("model_id") or "")
     provider_host = str(data.get("provider_host") or incident.get("base_url_host") or "")
     verdict_by_id = {
-        str(item.get("claim_id")): str(item.get("status") or "")
+        str(item.get("claim_id")): item
         for item in (_mapping(verdict) for verdict in verdicts)
     }
     rows: list[dict[str, str]] = []
     narrative: list[str] = []
     techniques: list[dict[str, str]] = []
     evidence_ids: list[str] = []
+    rejected: list[dict[str, str]] = []
     for claim in claims:
         item = _mapping(claim)
         statement = str(item.get("statement") or "")
         claim_type = str(item.get("claim_type") or "")
         claim_id = str(item.get("claim_id") or "")
-        if claim_type != "authorization" and claim_id:
+        verdict = verdict_by_id.get(claim_id) or {}
+        status = str(verdict.get("status") or "")
+        if claim_type != "authorization" and claim_id and status != "REJECTED":
             evidence_ids.append(claim_id)
+        if status == "REJECTED":
+            rejected.append(
+                {
+                    "claim_id": claim_id,
+                    "statement": statement,
+                    "reason": str(verdict.get("reason") or ""),
+                    "row_id": str(item.get("row_id") or ""),
+                }
+            )
         rows.append(
             {
                 "Claim": statement,
-                "Verdict": _VERDICT_LABELS.get(verdict_by_id.get(claim_id, ""), "INSUFFICIENT"),
+                "Verdict": _VERDICT_LABELS.get(status, "INSUFFICIENT"),
                 "Evidence row id": str(item.get("row_id") or ""),
             }
         )
@@ -125,6 +137,7 @@ def investigation_view(source: Incident | Mapping[str, Any]) -> dict[str, Any]:
         "narrative": narrative,
         "techniques": techniques,
         "rows": rows,
+        "rejected": rejected,
         "evidence_claim_ids": evidence_ids,
         "gate_level": level,
         "gate_action": str(gate_map.get("action") or ""),

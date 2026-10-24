@@ -162,8 +162,28 @@ def _show_investigation_view(view: dict, *, controls: bool = True) -> None:
         st.info("No claims.")
     if view.get("gate"):
         st.write(view["gate"])
+    _show_escalation_packet(view)
     if controls:
         _show_gate_controls(view)
+
+
+def _show_escalation_packet(view: dict) -> None:
+    """Rejected claims stay visible, with the Oracle reason, after they leave the action."""
+    with st.expander("Escalation packet"):
+        if view.get("gate"):
+            st.write(view["gate"])
+        rejected = view.get("rejected") or []
+        if not rejected:
+            st.write("No claims were rejected by the Oracle.")
+            return
+        st.write("Rejected by the Oracle")
+        for item in rejected:
+            claim_id = item.get("claim_id") or ""
+            statement = item.get("statement") or ""
+            st.write(f"{claim_id}: {statement}" if claim_id else statement)
+            reason = item.get("reason") or ""
+            if reason:
+                st.caption(reason)
 
 
 def _show_gate_controls(view: dict) -> None:

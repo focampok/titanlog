@@ -166,15 +166,35 @@ def recommend_gate(
     verdicts: list[ClaimVerdict],
     *,
     tai: bool = False,
+    close: bool = False,
+    severity: str | None = None,
 ) -> GateRecommendation:
     """Recommend disable_account. P0 impact is high, so this does not return AUTO.
 
-    A rejected evidence claim blocks the action. A rejected authorization claim
-    does not, by itself, block containment that verified evidence already supports.
+    A rejected claim is dropped from the evidence and written to the audit log
+    unless it is the only evidence for its account or host. A rejected
+    authorization claim does not, by itself, block containment that verified
+    evidence already supports.
     """
-    from gate import propose
+    from gate import propose, record_audit
 
-    return propose(claims, verdicts, tai=tai, privileged=True)
+    decision = propose(
+        claims,
+        verdicts,
+        tai=tai,
+        privileged=True,
+        close=close,
+        severity=severity,
+    )
+    if decision.excluded_claim_ids:
+        record_audit(
+            actor="oracle",
+            action="exclude_claim",
+            evidence_ids=decision.excluded_claim_ids,
+            gate_decision=decision.level,
+            executed=False,
+        )
+    return decision
 
 
 def decision_from_verdicts(

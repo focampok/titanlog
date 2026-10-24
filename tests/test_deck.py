@@ -12,6 +12,8 @@ from console import analyst_minutes_estimate
 ROOT = Path(__file__).resolve().parents[1]
 DECK = ROOT / "pitch" / "deck.html"
 ALLOWED_URLS = [
+    "https://focampo.com",
+    "https://focampo.com",
     "https://github.com/focampok/titanlog",
     "https://titan-log.focampo.com",
 ]

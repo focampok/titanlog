@@ -1144,3 +1144,6 @@ with tabs[2]:
     _attack_tab()
 with tabs[3]:
     _about_tab()
+
+st.divider()
+st.markdown("[Francisco Ocampo](https://focampo.com)")

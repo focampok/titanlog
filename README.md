@@ -94,3 +94,7 @@ https://titan-log.focampo.com serves this repo read-only.
 - Set `DEMO_READONLY=1`.
 - Do not set `LLM_BASE_URL`, `LLM_API_KEY`, or `LLM_MODEL` on the public service.
 - The app reads `results/run_cache.json`. It does not call a model.
+
+---
+
+[Francisco Ocampo](https://focampo.com)

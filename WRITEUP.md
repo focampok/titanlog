@@ -93,3 +93,7 @@ Not implemented.
 - Greshake et al., 2023. "Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection."
 - MITRE ATT&CK — T1003.001 (LSASS Memory), T1569.002 (Service Execution), T1021.002 (SMB/Windows Admin Shares).
 - OTRF Security-Datasets (MIT). https://github.com/OTRF/Security-Datasets
+
+---
+
+[Francisco Ocampo](https://focampo.com)

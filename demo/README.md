@@ -41,3 +41,7 @@ That text is simulated. It was not in the OTRF capture. The button highlights bo
 Those two lines are written under `data/quarantine/` when the button runs. The quarantined count is 2.
 
 Line 29 has Windows fields but no host, no user, and no EventID. It is not quarantined. The screen marks it **Insufficient evidence**.
+
+---
+
+[Francisco Ocampo](https://focampo.com)

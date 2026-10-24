@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import re
+import subprocess
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
@@ -12,7 +14,7 @@ from console import analyst_minutes_estimate
 ROOT = Path(__file__).resolve().parents[1]
 DECK = ROOT / "pitch" / "deck.html"
 ALLOWED_URLS = [
-    "https://focampo.com",
+    "https://info-titan-log.focampo.com",
     "https://focampo.com",
     "https://github.com/focampok/titanlog",
     "https://titan-log.focampo.com",
@@ -55,8 +57,10 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     assert any(url.startswith("data:image/") for url in parsed.urls)
     assert "Where it fits" in text
     assert "Dónde encaja" in text
-    assert "AI-native SOC architecture" in text
-    assert "Arquitectura SOC nativa de IA" in text
+    assert "A vendor-neutral trust layer for any AI SOC, SOAR, or analyst using an LLM." in text
+    assert "Una capa de confianza neutral para cualquier AI SOC, SOAR o analista que use un LLM." in text
+    assert "Why it matters" in text
+    assert "Por qué importa" in text
     assert "A un prompt se le puede convencer. A un verificador, no." in text
     assert "Next steps. Not implemented." in text
     assert "Próximos pasos" in text
@@ -104,3 +108,41 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     assert label in writeup
     assert "[pending]" not in text
     assert "[pending]" not in writeup
+
+
+def test_deck_inlines_vendor_neutral_diagrams() -> None:
+    text = DECK.read_text(encoding="utf-8")
+    assert "titanlog-stack" not in text
+    assert text.count('class="stack"') == 2
+    assert "Any AI SOC" in text
+    assert "Cualquier AI SOC" in text
+    assert "Titan.Log" in text
+
+
+def _tracked_text_files() -> list[tuple[Path, str]]:
+    listed = subprocess.run(
+        ["git", "ls-files", "-z"], cwd=ROOT, check=True, capture_output=True
+    ).stdout
+    files: list[tuple[Path, str]] = []
+    for raw in listed.split(b"\0"):
+        if not raw:
+            continue
+        path = ROOT / raw.decode("utf-8")
+        if not path.is_file():
+            continue
+        data = path.read_bytes()
+        if b"\x00" in data:
+            continue
+        files.append((path, data.decode("utf-8", errors="replace")))
+    return files
+
+
+def test_no_event_or_organizer_references_in_tracked_files() -> None:
+    vendor = "ala" + "ris"
+    organizer = "un" + "is"
+    whole_word = re.compile(r"\b" + organizer + r"\b", re.IGNORECASE)
+    hits = []
+    for path, text in _tracked_text_files():
+        if vendor in text.casefold() or whole_word.search(text):
+            hits.append(str(path.relative_to(ROOT)))
+    assert hits == []

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8f0ff"/><stop offset="0.5" stop-color="#eef7e2"/><stop offset="1" stop-color="#e6e1fb"/></linearGradient>
+<linearGradient id="cy" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a5f3fc"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16" result="b"/><feFlood flood-color="#22d3ee" flood-opacity="0.75"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.18"/></filter>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7466d2"/></marker>
+<marker id="arrc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#06b6d4"/></marker>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<text x="60" y="80" font-size="34" font-weight="700" fill="#1f2340">Cualquier AI SOC</text>
+<text x="60" y="120" font-size="26" font-weight="600" fill="#0e7490">+ capa de confianza Titan.Log</text>
+<path d="M306,430.0 L328,430.0" stroke="#7466d2" stroke-width="3.5" fill="none" marker-end="url(#arr)"/>
+<path d="M582,430.0 L604,430.0" stroke="#7466d2" stroke-width="3.5" fill="none" marker-end="url(#arr)"/>
+<path d="M858,430.0 L880,430.0" stroke="#06b6d4" stroke-width="3.5" fill="none" marker-end="url(#arrc)"/>
+<path d="M1270,430.0 L1292,430.0" stroke="#06b6d4" stroke-width="3.5" fill="none" marker-end="url(#arrc)"/>
+<rect x="60" y="260" width="240" height="340" rx="18" fill="#ffffff" stroke="#c9c2f2" stroke-width="2" filter="url(#sh)"/>
+<circle cx="94" cy="298" r="17" fill="#7466d2"/>
+<text x="94" y="305" text-anchor="middle" font-size="19" font-weight="700" fill="#ffffff">1</text>
+<text x="82" y="356" font-size="25" font-weight="700" fill="#3b2f8f">Fuentes de logs</text>
+<line x1="82" y1="380" x2="278" y2="380" stroke="#e4e0fa" stroke-width="2"/>
+<circle cx="88" cy="418" r="4.5" fill="#7466d2"/>
+<text x="102" y="424" font-size="19" font-weight="500" fill="#4a4f6e">Endpoints</text>
+<circle cx="88" cy="458" r="4.5" fill="#7466d2"/>
+<text x="102" y="464" font-size="19" font-weight="500" fill="#4a4f6e">Nube</text>
+<circle cx="88" cy="498" r="4.5" fill="#7466d2"/>
+<text x="102" y="504" font-size="19" font-weight="500" fill="#4a4f6e">Red</text>
+<circle cx="88" cy="538" r="4.5" fill="#7466d2"/>
+<text x="102" y="544" font-size="19" font-weight="500" fill="#4a4f6e">Identidad</text>
+<rect x="336" y="260" width="240" height="340" rx="18" fill="#ffffff" stroke="#c9c2f2" stroke-width="2" filter="url(#sh)"/>
+<circle cx="370" cy="298" r="17" fill="#7466d2"/>
+<text x="370" y="305" text-anchor="middle" font-size="19" font-weight="700" fill="#ffffff">2</text>
+<text x="358" y="356" font-size="25" font-weight="700" fill="#3b2f8f">Detección / SIEM</text>
+<line x1="358" y1="380" x2="554" y2="380" stroke="#e4e0fa" stroke-width="2"/>
+<circle cx="364" cy="418" r="4.5" fill="#7466d2"/>
+<text x="378" y="424" font-size="19" font-weight="500" fill="#4a4f6e">Reglas y correlación</text>
+<circle cx="364" cy="458" r="4.5" fill="#7466d2"/>
+<text x="378" y="464" font-size="19" font-weight="500" fill="#4a4f6e">Alertas → incidentes</text>
+<rect x="612" y="260" width="240" height="340" rx="18" fill="#ffffff" stroke="#c9c2f2" stroke-width="2" filter="url(#sh)"/>
+<circle cx="646" cy="298" r="17" fill="#7466d2"/>
+<text x="646" y="305" text-anchor="middle" font-size="19" font-weight="700" fill="#ffffff">3</text>
+<text x="634" y="356" font-size="25" font-weight="700" fill="#3b2f8f">Agentes de</text>
+<text x="634" y="386" font-size="25" font-weight="700" fill="#3b2f8f">triage con IA</text>
+<line x1="634" y1="410" x2="830" y2="410" stroke="#e4e0fa" stroke-width="2"/>
+<circle cx="640" cy="448" r="4.5" fill="#7466d2"/>
+<text x="654" y="454" font-size="19" font-weight="500" fill="#4a4f6e">El LLM investiga</text>
+<circle cx="640" cy="488" r="4.5" fill="#7466d2"/>
+<text x="654" y="494" font-size="19" font-weight="500" fill="#4a4f6e">Propone veredicto</text>
+<text x="654" y="522" font-size="19" font-weight="500" fill="#4a4f6e">+ afirmaciones</text>
+<rect x="1300" y="260" width="240" height="340" rx="18" fill="#ffffff" stroke="#c9c2f2" stroke-width="2" filter="url(#sh)"/>
+<circle cx="1334" cy="298" r="17" fill="#7466d2"/>
+<text x="1334" y="305" text-anchor="middle" font-size="19" font-weight="700" fill="#ffffff">5</text>
+<text x="1322" y="356" font-size="25" font-weight="700" fill="#3b2f8f">Acción</text>
+<line x1="1322" y1="380" x2="1518" y2="380" stroke="#e4e0fa" stroke-width="2"/>
+<circle cx="1328" cy="418" r="4.5" fill="#7466d2"/>
+<text x="1342" y="424" font-size="19" font-weight="500" fill="#4a4f6e">Cierre automático</text>
+<circle cx="1328" cy="458" r="4.5" fill="#7466d2"/>
+<text x="1342" y="464" font-size="19" font-weight="500" fill="#4a4f6e">Respuesta / SOAR</text>
+<circle cx="1328" cy="498" r="4.5" fill="#7466d2"/>
+<text x="1342" y="504" font-size="19" font-weight="500" fill="#4a4f6e">Analista humano</text>
+<rect x="888" y="210" width="376" height="440" rx="22" fill="url(#cy)" stroke="#ecfeff" stroke-width="2.5" filter="url(#glow)"/>
+<circle cx="926" cy="254" r="18" fill="#062a33"/>
+<text x="926" y="261" text-anchor="middle" font-size="19" font-weight="800" fill="#a5f3fc">4</text>
+<text x="958" y="264" font-size="34" font-weight="800" fill="#062a33">Titan.Log</text>
+<text x="914" y="306" font-size="27" font-weight="700" fill="#0b4250">Capa de confianza</text>
+<line x1="914" y1="330" x2="1238" y2="330" stroke="#0e7490" stroke-opacity="0.45" stroke-width="2"/>
+<circle cx="924" cy="372" r="6" fill="#062a33"/>
+<text x="942" y="380" font-size="21" font-weight="700" fill="#062a33">El Oracle verifica cada</text>
+<text x="942" y="410" font-size="21" font-weight="600" fill="#062a33">afirmación contra</text>
+<text x="942" y="440" font-size="21" font-weight="600" fill="#062a33">los logs crudos</text>
+<circle cx="924" cy="484" r="6" fill="#062a33"/>
+<text x="942" y="492" font-size="21" font-weight="700" fill="#062a33">La compuerta decide:</text>
+<rect x="942" y="502" width="72" height="34" rx="17" fill="#16a34a"/>
+<text x="978" y="526" text-anchor="middle" font-size="18" font-weight="800" fill="#ffffff">AUTO</text>
+<rect x="1024.0" y="502" width="112" height="34" rx="17" fill="#f59e0b"/>
+<text x="1080" y="526" text-anchor="middle" font-size="18" font-weight="800" fill="#ffffff">APPROVE</text>
+<rect x="1146.5" y="502" width="72" height="34" rx="17" fill="#ef4444"/>
+<text x="1182" y="526" text-anchor="middle" font-size="18" font-weight="800" fill="#ffffff">DENY</text>
+<circle cx="924" cy="574" r="6" fill="#062a33"/>
+<text x="942" y="582" font-size="21" font-weight="700" fill="#062a33">Auditoría JSONL de cada paso</text>
+<path d="M1076.0,658 V718 H180.0 V612" fill="none" stroke="#06b6d4" stroke-width="2.8" stroke-dasharray="10 8" stroke-linejoin="round" marker-end="url(#arrc)"/>
+<rect x="108.0" y="698" width="1040" height="40" rx="20" fill="#ffffff" stroke="#06b6d4" stroke-width="1.5"/>
+<text x="628.0" y="725" text-anchor="middle" font-size="19" font-weight="600" fill="#0e7490">El Oracle lee los logs crudos directamente (mapa de campos YAML), no el resumen de la IA</text>
+<text x="800" y="836" text-anchor="middle" font-size="32" font-weight="700" fill="#1f2340">Entre el veredicto de la IA y la acción.</text>
+<text x="800" y="874" text-anchor="middle" font-size="16" fill="#6b7090">Flujo de referencia neutral. Funciona con cualquier SIEM, LLM o SOAR.</text>
+</svg>

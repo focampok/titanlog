@@ -14,7 +14,7 @@ Build Titan.Log: an AUTONOMOUS L1/L2 incident triage & investigation agent (corr
 - Data: local JSONL under data/otrf/ (OTRF Security-Datasets, MIT). Do not re-download in prompts unless missing.
 
 ## Plug-in layer rules (adoption)
-- Titan.Log is a LAYER, not a platform: sits between Data Connectors / Security Graph and the Agent layer (Alaris stack); feeds the Human Workbench via gate + audit.
+- Titan.Log is a LAYER, not a platform: sits between AI triage agents and the action; feeds the human analyst via gate + audit.
 - All input goes through `Adapter.to_events()` → common event schema with ECS-like names (process.command_line, process.executable, process.parent.executable, host.name, user.name, event.code, winlog.channel, service.name, file.path, @timestamp, row_id, raw).
 - Adapters: OtrfSysmonAdapter + GenericJsonlAdapter(field_map YAML at config/field_map.yaml). New log source = edit YAML, not code.
 - Public API (src/titanlog/__init__.py): `triage(events) -> Incident` and `verify(claims, events) -> list[Verdict]`, JSON-serializable (`.model_dump_json()`), so any agent framework can call it.

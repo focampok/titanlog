@@ -1088,7 +1088,7 @@ def _attack_tab() -> None:
 def _about_tab() -> None:
     _section("About Titan.Log")
     st.markdown(
-        "1. Titan.Log is a trust layer between an AI SOC and the logs it reads.\n"
+        "1. Titan.Log is a vendor-neutral trust layer for any AI SOC, SOAR, or analyst using an LLM.\n"
         "2. Ingest is robust: bad lines are skipped, counted, and quarantined; unknown input goes to a human.\n"
         "3. The model proposes structured claims; a deterministic Oracle verifies each one.\n"
         "4. A gate escalates or blocks containment, and every decision is written to the audit log.\n"
@@ -1096,7 +1096,7 @@ def _about_tab() -> None:
     )
     st.markdown(
         '<div class="arch">'
-        '<div class="box"><b>Data connectors</b>OTRF JSONL, generic JSONL via a field map</div>'
+        '<div class="box"><b>Log sources</b>OTRF JSONL, generic JSONL via a field map</div>'
         '<div class="arrow">→</div>'
         '<div class="box"><b>Ingest</b>normalize, skip + count, quarantine, insufficient evidence</div>'
         '<div class="arrow">→</div>'
@@ -1106,7 +1106,7 @@ def _about_tab() -> None:
         '<div class="arrow">→</div>'
         '<div class="box"><b>Gate + audit</b>AUTO / APPROVE / DENY, local JSONL mock</div>'
         '<div class="arrow">→</div>'
-        '<div class="box"><b>Human workbench</b>escalation packet, evidence, decision</div>'
+        '<div class="box"><b>Human analyst</b>escalation packet, evidence, decision</div>'
         "</div>",
         unsafe_allow_html=True,
     )

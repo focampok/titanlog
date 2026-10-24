@@ -1,6 +1,6 @@
 # Titan.Log
 
-A trust layer between an AI security-operations verdict and the action. The live triage below is on real OTRF logs. Injection results are SIMULATED attacks on those same logs.
+A vendor-neutral trust layer for any AI SOC, SOAR, or analyst using an LLM. It sits between an AI security-operations verdict and the action. The live triage below is on real OTRF logs. Injection results are SIMULATED attacks on those same logs.
 
 ## Problem
 
@@ -14,7 +14,7 @@ There is a second problem, and it is specific to a SOC: the attacker writes the 
 
 Titan.Log sits between the AI verdict and the action. It is complementary to an AI SOC, not a replacement for one. Human handoff is triggered by claims that fail verification against the logs, not by model confidence. Adversarial training hardens the model; Titan.Log verifies the output, whatever the model.
 
-The impact, in the words of the challenge:
+The impact:
 
 - **Save time.** Related alerts are grouped into one incident. The measured compression on the cached run is 4532 events → 12 alerts → 1 incident (`results/run_cache.json`, `event_counts`). Saved analyst minutes are not in the results files. The UI uses the same config ESTIMATE: ~35 min saved per incident (ESTIMATE: 27–44 min; manual 30–45 min vs 1–3 min with Titan.Log; assumptions, not measured).
 - **Make better decisions.** Every claim is checked against a real log row. On the cached live triage, 13 of 13 claims are VERIFIED, severity is HIGH, and `close` is false (`results/run_cache.json`). The SIMULATED injection table below is the adversarial check.
@@ -81,7 +81,7 @@ A saved-minutes measurement is not in the results files. The config ESTIMATE is 
 
 Not implemented.
 
-- MCP server: expose `verify()` as an MCP tool so any AI SOC agent (for example Alaris Agent Builder) can check its claims before acting. Roadmap, not built.
+- MCP server: expose `verify()` as an MCP tool so any AI SOC agent can check its claims before acting. Roadmap, not built.
 - Read-only public MCP: `verify` and cached triage, no LLM.
 - Sigma rules from VERIFIED claims, backtested on OTRF.
 - Hash-chained audit log, and a real authorization check (ServiceNow/Jira) instead of the stub.

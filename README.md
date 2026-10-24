@@ -1,6 +1,6 @@
 # Titan.Log
 
-A trust layer between an AI SOC verdict and the action.
+A vendor-neutral trust layer for any AI SOC, SOAR, or analyst using an LLM. It sits between the AI SOC verdict and the action.
 
 - Live app (read-only, cached results, no live model): https://titan-log.focampo.com
 - Pitch deck: [pitch/deck.html](pitch/deck.html) · https://info-titan-log.focampo.com/
@@ -22,7 +22,7 @@ A trust layer between an AI SOC verdict and the action.
 
 Not implemented.
 
-- MCP server: expose `verify()` as an MCP tool so any AI SOC agent (for example Alaris Agent Builder) can check its claims before acting. Roadmap, not built.
+- MCP server: expose `verify()` as an MCP tool so any AI SOC agent can check its claims before acting. Roadmap, not built.
 - Read-only public MCP: `verify` and cached triage, no LLM.
 - Sigma rules from VERIFIED claims, backtested on OTRF.
 - Hash-chained audit log, and a real authorization check (ServiceNow/Jira) instead of the stub.

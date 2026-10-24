@@ -14,6 +14,7 @@ COLUMNS = [
     "row_id",
     "ts",
     "host_name",
+    "host_key",
     "user_name",
     "event_code",
     "winlog_channel",
@@ -25,6 +26,7 @@ COLUMNS = [
     "file_path",
     "service_name",
     "service_path",
+    "has_attacker_controlled_field",
     "source_file",
 ]
 
@@ -35,6 +37,7 @@ def event_to_row(event: Event) -> dict[str, object]:
         "row_id": event.row_id,
         "ts": ts,
         "host_name": event.host_name,
+        "host_key": event.host_key,
         "user_name": event.user_name,
         "event_code": event.event_code,
         "winlog_channel": event.winlog_channel,
@@ -46,6 +49,7 @@ def event_to_row(event: Event) -> dict[str, object]:
         "file_path": event.file_path,
         "service_name": event.service_name,
         "service_path": event.service_path,
+        "has_attacker_controlled_field": event.has_attacker_controlled_field,
         "source_file": event.source_file,
     }
 

@@ -5,11 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from ingest import load_dir
-from titanlog.adapters.otrf_sysmon import (
-    OtrfSysmonAdapter,
-    event_from_record,
-    stable_row_id,
-)
+from titanlog.adapters.generic_jsonl import event_from_record, stable_row_id
+from titanlog.adapters.otrf_sysmon import OtrfSysmonAdapter
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "otrf"

@@ -1,0 +1,16 @@
+# Source keys are tried in order. The first non-empty value wins.
+# A new log source is a change to this file, not to the adapter code.
+
+host.name: [Hostname, host, computer_name]
+user.name: [SubjectUserName, User, TargetUserName, user]
+event.code: [EventID, event_id]
+winlog.channel: [Channel, channel]
+process.executable: [Image, NewProcessName]
+process.command_line: [CommandLine, cmdline]
+process.parent.executable: [ParentImage, parent_image]
+target.process.executable: [TargetImage, target_image]
+granted_access: [GrantedAccess, granted_access]
+file.path: [TargetFilename, file_path]
+service.name: [ServiceName, service_name]
+service.path: [ServiceFileName, ImagePath]
+"@timestamp": [UtcTime, "@timestamp", TimeCreated]

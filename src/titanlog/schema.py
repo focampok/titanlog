@@ -16,6 +16,7 @@ class Event(BaseModel):
     row_id: str
     ts: datetime | str | None = None
     host_name: str | None = None
+    host_key: str | None = None
     user_name: str | None = None
     event_code: int
     winlog_channel: str | None = None
@@ -27,6 +28,7 @@ class Event(BaseModel):
     file_path: str | None = None
     service_name: str | None = None
     service_path: str | None = None
+    has_attacker_controlled_field: bool = False
     source_file: str
     raw: dict[str, Any]
 
@@ -39,6 +41,7 @@ class Event(BaseModel):
             "row_id": self.row_id,
             "@timestamp": ts,
             "host.name": self.host_name,
+            "host_key": self.host_key,
             "user.name": self.user_name,
             "event.code": self.event_code,
             "winlog.channel": self.winlog_channel,
@@ -50,6 +53,7 @@ class Event(BaseModel):
             "file.path": self.file_path,
             "service.name": self.service_name,
             "service.path": self.service_path,
+            "has_attacker_controlled_field": self.has_attacker_controlled_field,
             "source_file": self.source_file,
             "raw": self.raw,
         }

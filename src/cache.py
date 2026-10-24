@@ -20,6 +20,59 @@ _REPO = Path(__file__).resolve().parents[1]
 SUMMARY_PATH = _REPO / "results" / "afcr_summary.json"
 TABLE_PATH = _REPO / "results" / "afcr_table.json"
 CACHE_PATH = _REPO / "results" / "run_cache.json"
+INJECTIONS_PATH = _REPO / "data" / "simulated" / "injections.jsonl"
+# The Naive arm in the demo is Qwen3-30B. Prefer its saved trials.
+_PARTIAL_PATHS = (
+    _REPO / "results" / "afcr_partial_qwen30b.jsonl",
+    _REPO / "results" / "afcr_partial_deepseek.jsonl",
+)
+_VARIANTS_TABLE_PATHS = (
+    _REPO / "results" / "afcr_table_qwen30b.json",
+    _REPO / "results" / "afcr_table.json",
+)
+_INJECTED_FIELDS = (
+    "row_id",
+    "ts",
+    "host_name",
+    "host_key",
+    "user_name",
+    "event_code",
+    "winlog_channel",
+    "process_executable",
+    "process_command_line",
+    "process_parent_executable",
+    "target_process_executable",
+    "granted_access",
+    "file_path",
+    "service_name",
+    "service_path",
+    "has_attacker_controlled_field",
+    "truncated",
+    "source_file",
+    "base_row_id",
+    "simulated",
+    "injection_id",
+    "attack_objective",
+)
+_INJECTED_RAW_FIELDS = (
+    "EventID",
+    "UtcTime",
+    "TimeCreated",
+    "Channel",
+    "Hostname",
+    "User",
+    "Image",
+    "NewProcessName",
+    "CommandLine",
+    "ParentImage",
+    "TargetImage",
+    "GrantedAccess",
+    "ServiceName",
+    "ServiceFileName",
+    "ImagePath",
+    "TargetFilename",
+    "Message",
+)
 
 _EMPTY: dict[str, Any] = {
     "model": "",
@@ -31,6 +84,7 @@ _EMPTY: dict[str, Any] = {
     "verdicts": [],
     "afcr_table": None,
     "afcr_summary": None,
+    "afcr_variants": None,
     "gate": None,
     "rationale": "",
 }
@@ -45,6 +99,144 @@ _VERDICT_LABELS = {
 def load_afcr_summary(path: str | Path | None = None) -> dict[str, Any] | None:
     """Return the saved summary, or None when the file is absent."""
     return _load_object(Path(path) if path is not None else SUMMARY_PATH)
+
+
+def load_cached_injections(
+    *,
+    partial_path: str | Path | None = None,
+    table_path: str | Path | None = None,
+    injections_path: str | Path | None = None,
+) -> dict[str, Any] | None:
+    """Saved injection decisions, rationales, and rows. No model call.
+
+    The source is the partial JSONL written by the AFCR eval, the per-injection
+    table, and the saved simulated variants. A missing field stays missing; the
+    app renders "[not in cache]".
+    """
+    partial = _first_existing(Path(partial_path) if partial_path else None, _PARTIAL_PATHS)
+    if partial is None:
+        return None
+    records = [
+        row
+        for row in _read_jsonl(partial)
+        if str(row.get("injection_id") or "") not in {"", "__baseline__"}
+    ]
+    if not records:
+        return None
+    table = _load_object_from(
+        Path(table_path) if table_path else None,
+        _VARIANTS_TABLE_PATHS,
+    ) or {}
+    by_injection = table.get("by_injection") if isinstance(table.get("by_injection"), dict) else {}
+    injected_rows = {
+        str(row.get("injection_id") or ""): row
+        for row in _read_jsonl(Path(injections_path) if injections_path else INJECTIONS_PATH)
+        if str(row.get("injection_id") or "")
+    }
+    variants: dict[str, Any] = {}
+    for record in records:
+        injection_id = str(record.get("injection_id") or "")
+        arm = str(record.get("arm") or "")
+        if not injection_id or not arm:
+            continue
+        entry = variants.setdefault(
+            injection_id,
+            {
+                "injection_id": injection_id,
+                "attack_objective": str(record.get("attack_objective") or ""),
+                "model_id": str(record.get("model_id") or ""),
+                "provider_host": str(record.get("provider_host") or ""),
+                "arms": {},
+            },
+        )
+        trial = int(record.get("trial") or 1)
+        previous = entry["arms"].get(arm)
+        if previous is None or trial < int(previous.get("trial") or 999):
+            entry["arms"][arm] = {
+                "trial": trial,
+                "timestamp": record.get("timestamp"),
+                "model_id": record.get("model_id"),
+                "provider_host": record.get("provider_host"),
+                "outcome": record.get("outcome"),
+                "severity": record.get("severity"),
+                "close": record.get("close"),
+                "rationale": record.get("rationale"),
+                "fallback": record.get("fallback"),
+                "tai": record.get("tai"),
+                "rejected_authorization": record.get("rejected_authorization"),
+            }
+        entry["counts"] = by_injection.get(injection_id) or {}
+        injected = injected_rows.get(injection_id)
+        if injected is not None:
+            entry["field"] = _injected_field(injection_id)
+            entry["payload"] = _injection_payload(injection_id)
+            entry["base_row_id"] = str(injected.get("base_row_id") or "")
+            entry["injected_row"] = _trim_injected_row(injected)
+    if not variants:
+        return None
+    first = records[0]
+    return {
+        "simulated": True,
+        "model_id": str(table.get("model_id") or first.get("model_id") or ""),
+        "provider_host": str(table.get("provider_host") or first.get("provider_host") or ""),
+        "source": partial.name,
+        "variants": dict(sorted(variants.items())),
+    }
+
+
+def _injection_payload(injection_id: str) -> str:
+    from inject import injection_payload
+
+    return injection_payload(injection_id)
+
+
+def _injected_field(injection_id: str) -> str:
+    from inject import _VARIANTS
+
+    for spec in _VARIANTS:
+        if spec[0] == injection_id:
+            return spec[2]
+    return ""
+
+
+def _trim_injected_row(row: dict[str, Any]) -> dict[str, Any]:
+    trimmed = {key: row.get(key) for key in _INJECTED_FIELDS if key in row}
+    raw = row.get("raw")
+    if isinstance(raw, dict):
+        trimmed["raw"] = {
+            key: raw.get(key) for key in _INJECTED_RAW_FIELDS if key in raw
+        }
+    return trimmed
+
+
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    rows: list[dict[str, Any]] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict):
+            rows.append(row)
+    return rows
+
+
+def _first_existing(explicit: Path | None, candidates: tuple[Path, ...]) -> Path | None:
+    if explicit is not None:
+        return explicit if explicit.exists() else None
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def _load_object_from(explicit: Path | None, candidates: tuple[Path, ...]) -> dict[str, Any] | None:
+    target = _first_existing(explicit, candidates)
+    return _load_object(target) if target is not None else None
 
 
 def payload_from_incident(incident: Incident) -> dict[str, Any]:
@@ -168,6 +360,9 @@ def save_run(
     table = _load_object(Path(table_path) if table_path is not None else TABLE_PATH)
     if table is not None:
         body["afcr_table"] = table
+    variants = load_cached_injections()
+    if variants is not None:
+        body["afcr_variants"] = variants
     if not body.get("model"):
         body["model"] = _recorded_model(body)
     if not body.get("provider_host"):

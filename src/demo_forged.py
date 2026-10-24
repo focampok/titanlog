@@ -12,7 +12,9 @@ from cache import load_run
 from claims import Claim, ClaimType
 from correlate import correlate
 from detectors import detect
+from gate import propose
 from ingest import ingest_file
+from inject_scan import scan_events
 from oracle import verify_all
 from titanlog.adapters.generic_jsonl import stable_row_id
 
@@ -43,6 +45,9 @@ class ForgedDemo:
     injection_verdicts: list[tuple[str, str]] = field(default_factory=list)
     cache_close: str = NOT_IN_CACHE
     cache_claim: str = NOT_IN_CACHE
+    gate_level: str = NOT_IN_CACHE
+    gate_action: str = ""
+    gate_reason: str = NOT_IN_CACHE
 
 
 def review_forged(
@@ -61,7 +66,15 @@ def review_forged(
     incident = correlate(frame, alerts)
     claims = claims_from_alerts(alerts) + _injection_claims(file_path)
     verdicts = verify_all(claims, frame.to_dict(orient="records"))
-    _severity, close, _rationale = decision_from_verdicts(alerts, claims, verdicts)
+    severity, close, _rationale = decision_from_verdicts(alerts, claims, verdicts)
+    gate = propose(
+        claims,
+        verdicts,
+        tai=bool(scan_events(frame.to_dict(orient="records"))),
+        privileged=True,
+        close=close,
+        severity=severity,
+    )
     by_id = {verdict.claim_id: verdict for verdict in verdicts}
     shown: list[tuple[str, str]] = []
     for claim in claims:
@@ -82,6 +95,9 @@ def review_forged(
         injection_verdicts=shown,
         cache_close=cache_close,
         cache_claim=cache_claim,
+        gate_level=gate.level,
+        gate_action=gate.action,
+        gate_reason=gate.reason,
     )
 
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -31,7 +30,7 @@ def main() -> int:
     client = OpenAI(api_key=api_key, base_url=base_url)
     try:
         response = client.chat.completions.create(**request)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - provider errors vary; the key is redacted below.
         print(str(exc).replace(api_key, "[redacted]"))
         return 1
 

@@ -77,9 +77,14 @@ The audit log has no hash chain.
 
 A saved-minutes measurement is not in the results files. The config ESTIMATE is ~35 min saved per incident (ESTIMATE: 27–44 min; manual 30–45 min vs 1–3 min with Titan.Log; assumptions, not measured).
 
-## Roadmap
+## Roadmap / Next steps
 
-An MCP verify tool, so another agent can call the Oracle without calling a model. Sigma rules generated from VERIFIED claims and checked against the OTRF files. A hash-chained audit for shift handover.
+Not implemented.
+
+- MCP server: expose `verify()` as an MCP tool so any AI SOC agent (for example Alaris Agent Builder) can check its claims before acting. Roadmap, not built.
+- Read-only public MCP: `verify` and cached triage, no LLM.
+- Sigma rules from VERIFIED claims, backtested on OTRF.
+- Hash-chained audit log, and a real authorization check (ServiceNow/Jira) instead of the stub.
 
 ## References
 

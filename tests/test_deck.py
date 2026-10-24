@@ -40,18 +40,23 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     text = DECK.read_text(encoding="utf-8")
     root = ET.fromstring(text[text.index("<html") :])
     slides = [node for node in root.iter(f"{{{NS}}}section") if "slide" in (node.get("class") or "")]
-    assert len(slides) == 7
+    assert len(slides) == 8
+    titles = [slide.find(f"{{{NS}}}h1").get("data-en") for slide in slides]
+    assert titles[-2:] == ["Roadmap", "Glossary"]
 
     parsed = _Links()
     parsed.feed(text)
-    assert parsed.slides == 7
+    assert parsed.slides == 8
     assert parsed.urls == ALLOWED_URLS
     assert "Where it fits" in text
     assert "Dónde encaja" in text
     assert "AI-native SOC architecture" in text
     assert "Arquitectura SOC nativa de IA" in text
     assert "A un prompt se le puede convencer. A un verificador, no." in text
-    assert "MCP" not in text
+    assert "Next steps. Not implemented." in text
+    assert "Próximos pasos" in text
+    assert "Roadmap, not built." in text
+    assert "Model Context Protocol" in text
     assert "<img" not in text
     leftover = (
         text.replace("http://www.w3.org/2000/svg", "")

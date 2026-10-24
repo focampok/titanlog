@@ -2,11 +2,30 @@
 
 A trust layer between an AI SOC verdict and the action.
 
-Live demo (read-only, cached results, no live model): https://titan-log.focampo.com
+- Live app (read-only, cached results, no live model): https://titan-log.focampo.com
+- Pitch deck: [pitch/deck.html](pitch/deck.html) · https://info-titan-log.focampo.com/
+- Write-up: [WRITEUP.md](WRITEUP.md)
 
-Write-up: [WRITEUP.md](WRITEUP.md)
+## Submission
 
-Pitch deck: [pitch/deck.html](pitch/deck.html) · https://info-titan-log.focampo.com/ . Open the local file in a browser. It works offline, with an EN | ES toggle.
+**REAL.** OTRF logs, and the measured counts in `results/run_cache.json` and `results/afcr_summary.json`: event counts, verdicts, and AFCR numbers as x of n.
+
+**SIMULATED.** The injection overlay and the AFCR variants. Synthetic lines are labeled SIMULATED.
+
+**ESTIMATE.** Analyst minutes come from config, not from a measurement: ~35 min saved per incident (ESTIMATE: 27–44 min; manual 30–45 min vs 1–3 min with Titan.Log; assumptions, not measured).
+
+**AI usage.** Runtime calls an OpenAI-compatible API through `LLM_BASE_URL`, `LLM_API_KEY`, and `LLM_MODEL`. The default model is `deepseek-flash`. A second eval used `Qwen/Qwen3-30B-A3B-Instruct-2507` on Nebius Token Factory. Authoring used Claude Code, Roo Code, and Cursor. Ingest, quarantine, detectors, the correlator, the Oracle, the gate, and the AFCR math are deterministic.
+
+**Data.** OTRF Security-Datasets (MIT), https://github.com/OTRF/Security-Datasets. Files: `psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json` and `empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json`. SHA-256 of the source zips is in the citation table below.
+
+## Roadmap / Next steps
+
+Not implemented.
+
+- MCP server: expose `verify()` as an MCP tool so any AI SOC agent (for example Alaris Agent Builder) can check its claims before acting. Roadmap, not built.
+- Read-only public MCP: `verify` and cached triage, no LLM.
+- Sigma rules from VERIFIED claims, backtested on OTRF.
+- Hash-chained audit log, and a real authorization check (ServiceNow/Jira) instead of the stub.
 
 ## Quickstart
 

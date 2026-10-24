@@ -11,10 +11,10 @@ from console import analyst_minutes_estimate
 
 ROOT = Path(__file__).resolve().parents[1]
 DECK = ROOT / "pitch" / "deck.html"
-ALLOWED = {
+ALLOWED_URLS = [
     "https://github.com/focampok/titanlog",
     "https://titan-log.focampo.com",
-}
+]
 NS = "http://www.w3.org/1999/xhtml"
 
 
@@ -45,7 +45,7 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     parsed = _Links()
     parsed.feed(text)
     assert parsed.slides == 7
-    assert parsed.urls == list(ALLOWED)
+    assert parsed.urls == ALLOWED_URLS
     assert "Where it fits" in text
     assert "Dónde encaja" in text
     assert "AI-native SOC architecture" in text

@@ -6,7 +6,7 @@ Live demo (read-only, cached results, no live model): https://titan-log.focampo.
 
 Write-up: [WRITEUP.md](WRITEUP.md)
 
-Pitch deck: [pitch/deck.html](pitch/deck.html). Open the file in a browser. It works offline, with an EN | ES toggle.
+Pitch deck: [pitch/deck.html](pitch/deck.html) · https://info-titan-log.focampo.com/ . Open the local file in a browser. It works offline, with an EN | ES toggle.
 
 ## Quickstart
 

@@ -1113,6 +1113,10 @@ def _about_tab() -> None:
     st.markdown(
         "**Repository:** [github.com/focampok/titanlog](https://github.com/focampok/titanlog)"
     )
+    st.markdown(
+        "Pitch deck: [pitch/deck.html](pitch/deck.html) · "
+        "[https://info-titan-log.focampo.com/](https://info-titan-log.focampo.com/)"
+    )
     deck_path = ROOT / "pitch" / "deck.html"
     if deck_path.is_file():
         st.download_button(

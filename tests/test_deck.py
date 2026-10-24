@@ -64,8 +64,8 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     assert "Model Context Protocol" in text
     assert "A forged log line" in text
     assert "Una línea de log falsificada" in text
-    assert "Real OTRF logs with a SIMULATED attacker note and a malformed line." in text
-    assert "Logs reales de OTRF con una nota SIMULADA del atacante y una línea malformada." in text
+    assert "OTRF (Open Threat Research Forge), which offers several event datasets" in text
+    assert "OTRF (Open Threat Research Forge), que ofrece varios datasets de eventos" in text
     leftover = (
         text.replace("http://www.w3.org/2000/svg", "")
         .replace("http://www.w3.org/1999/xhtml", "")

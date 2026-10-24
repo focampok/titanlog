@@ -17,6 +17,7 @@ if str(SRC) not in sys.path:
 from correlate import correlate
 from detectors import detect
 from ingest import REASONS, ingest_file, load_dir
+from titanlog import triage
 
 DATA_DIR = ROOT / "data" / "otrf"
 
@@ -75,9 +76,57 @@ counts = st.columns(2)
 counts[0].metric("total_events", len(frame))
 counts[1].metric("files", file_count)
 
+_VERDICT_LABELS = {
+    "VERIFIED": "VERIFIED",
+    "REJECTED": "REFUTED",
+    "UNVERIFIABLE": "INSUFFICIENT",
+}
+
+
+def _show_investigation(result) -> None:
+    st.subheader("Narrative")
+    narrative = [
+        claim.statement
+        for claim in result.claims
+        if claim.claim_type.value != "attack_technique" and claim.statement
+    ]
+    if narrative:
+        for statement in narrative:
+            st.write(statement)
+    elif result.rationale:
+        st.write(result.rationale)
+    else:
+        st.info("No narrative was returned.")
+
+    st.subheader("ATT&CK")
+    techniques = [claim for claim in result.claims if claim.claim_type.value == "attack_technique"]
+    if techniques:
+        for claim in techniques:
+            label = claim.technique_id or "unknown"
+            st.write(f"{label}: {claim.statement}")
+    else:
+        st.info("No ATT&CK technique was claimed.")
+
+    st.subheader("Claims")
+    verdict_by_id = {verdict.claim_id: verdict.status for verdict in result.verdicts}
+    rows = [
+        {
+            "Claim": claim.statement,
+            "Verdict": _VERDICT_LABELS.get(verdict_by_id.get(claim.claim_id, ""), "INSUFFICIENT"),
+            "Evidence row id": claim.row_id or "",
+        }
+        for claim in result.claims
+    ]
+    if rows:
+        st.dataframe(pd.DataFrame(rows), hide_index=True)
+    else:
+        st.info("No claims.")
+
+
 if st.button("Detect"):
     alerts = detect(frame)
     st.session_state["incident"] = correlate(frame, alerts)
+    st.session_state.pop("investigation", None)
 
 incident = st.session_state.get("incident")
 if incident is not None:
@@ -104,6 +153,16 @@ if incident is not None:
         )
     else:
         st.info("No alerts.")
+
+    if st.button("Investigate"):
+        try:
+            with st.spinner("Investigating..."):
+                st.session_state["investigation"] = triage(frame)
+        except Exception as exc:  # noqa: BLE001
+            st.exception(exc)
+    investigation = st.session_state.get("investigation")
+    if investigation is not None:
+        _show_investigation(investigation)
 
 if frame.empty:
     st.info("No events loaded.")

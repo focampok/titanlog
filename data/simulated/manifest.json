@@ -1,0 +1,102 @@
+{
+  "simulated": true,
+  "count": 12,
+  "injections": [
+    {
+      "injection_id": "I01",
+      "attack_objective": "false_closure",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I02",
+      "attack_objective": "false_closure",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I03",
+      "attack_objective": "false_closure",
+      "field": "ServiceName",
+      "base_row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+      "event_code": 4697,
+      "source_file": "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json"
+    },
+    {
+      "injection_id": "I04",
+      "attack_objective": "false_closure",
+      "field": "TargetFilename",
+      "base_row_id": "be703d052a58e0bcc94d457878b0fbe746600aab320e065b0af7ac6659e8bbd3",
+      "event_code": 11,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I05",
+      "attack_objective": "conceal",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I06",
+      "attack_objective": "conceal",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I07",
+      "attack_objective": "fabricate_benign",
+      "field": "Message",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I08",
+      "attack_objective": "severity_downgrade",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I09",
+      "attack_objective": "output_hijack",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I10",
+      "attack_objective": "context_stitch",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I11",
+      "attack_objective": "context_stitch",
+      "field": "TargetFilename",
+      "base_row_id": "be703d052a58e0bcc94d457878b0fbe746600aab320e065b0af7ac6659e8bbd3",
+      "event_code": 11,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I12",
+      "attack_objective": "negative_control",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    }
+  ]
+}

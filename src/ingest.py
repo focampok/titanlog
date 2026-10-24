@@ -312,16 +312,38 @@ def ingest_file(
     return frame, report
 
 
+def _log_paths(directory: str | Path) -> list[Path]:
+    root = Path(directory)
+    if root.is_file():
+        return [root]
+    if not root.is_dir():
+        return []
+    return [
+        path
+        for path in sorted(root.iterdir())
+        if path.is_file() and path.suffix.lower() in {".json", ".jsonl"}
+    ]
+
+
 def load_dir(directory: str | Path = "data/otrf") -> pd.DataFrame:
     """Read every .json and .jsonl file in directory through OtrfSysmonAdapter."""
-    root = Path(directory)
-    if not root.is_dir():
-        return pd.DataFrame(columns=COLUMNS)
-    adapter = OtrfSysmonAdapter()
     rows: list[dict[str, object]] = []
-    for path in sorted(root.iterdir()):
-        if not path.is_file() or path.suffix.lower() not in {".json", ".jsonl"}:
-            continue
+    adapter = OtrfSysmonAdapter()
+    for path in _log_paths(directory):
         events, _report = adapter.to_events(path)
         rows.extend(event_to_row(event) for event in events)
     return pd.DataFrame(rows, columns=COLUMNS)
+
+
+def load_events(directory: str | Path = "data/otrf") -> pd.DataFrame:
+    """Normalized rows plus the original record. Accepts a directory or one file."""
+    rows: list[dict[str, object]] = []
+    adapter = OtrfSysmonAdapter()
+    for path in _log_paths(directory):
+        events, _report = adapter.to_events(path)
+        for event in events:
+            row = event_to_row(event)
+            row["raw"] = event.raw
+            rows.append(row)
+    columns = [*COLUMNS, "raw"]
+    return pd.DataFrame(rows, columns=columns)

@@ -5,6 +5,7 @@ from __future__ import annotations
 from console import (
     NOT_IN_CACHE,
     alert_rows,
+    analyst_minutes_estimate,
     attack_techniques,
     auto_resolved,
     cached,
@@ -107,6 +108,11 @@ def test_ops_kpis_and_time_estimate() -> None:
     assert kpis["time_saved"]["per_incident"] == 35.5
     assert kpis["time_saved"]["low"] == 27
     assert kpis["time_saved"]["high"] == 44
+    assert analyst_minutes_estimate() == (
+        "~35 min saved per incident "
+        "(ESTIMATE: 27–44 min; manual 30–45 min vs 1–3 min with Titan.Log; "
+        "assumptions, not measured)"
+    )
 
 
 def test_attack_techniques_falls_back_to_detectors_never_none() -> None:

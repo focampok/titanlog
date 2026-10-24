@@ -16,7 +16,7 @@ Titan.Log sits between the AI verdict and the action. It is complementary to an 
 
 The impact, in the words of the challenge:
 
-- **Save time.** Related alerts are grouped into one incident. The measured compression on the cached run is 4532 events → 12 alerts → 1 incident (`results/run_cache.json`, `event_counts`). A single saved-minutes figure is [pending]: it is not stored in the results files. The app labels an analyst-time range as an ESTIMATE, not as a measurement.
+- **Save time.** Related alerts are grouped into one incident. The measured compression on the cached run is 4532 events → 12 alerts → 1 incident (`results/run_cache.json`, `event_counts`). Saved analyst minutes are not in the results files. The UI uses the same config ESTIMATE: ~35 min saved per incident (ESTIMATE: 27–44 min; manual 30–45 min vs 1–3 min with Titan.Log; assumptions, not measured).
 - **Make better decisions.** Every claim is checked against a real log row. On the cached live triage, 13 of 13 claims are VERIFIED, severity is HIGH, and `close` is false (`results/run_cache.json`). The SIMULATED injection table below is the adversarial check.
 - **Respond faster.** The gate and the escalation packet are what the next analyst reads. On this cache the gate is APPROVE for `disable_account`: verified evidence supports the action, and a human still approves it.
 
@@ -59,7 +59,7 @@ The cached live triage (`results/run_cache.json`, `saved_at` 2026-10-24T20:24:06
 
 ### Estimated
 
-Analyst minutes are not in the results files. Saved minutes: [pending].
+Analyst minutes are not in the results files. Saved minutes: ~35 min saved per incident (ESTIMATE: 27–44 min; manual 30–45 min vs 1–3 min with Titan.Log; assumptions, not measured).
 
 ## Operational impact
 
@@ -75,7 +75,7 @@ The authorization verifier is a stub. It does not call ServiceNow or Jira in thi
 
 The audit log has no hash chain.
 
-A saved-minutes measurement is [pending].
+A saved-minutes measurement is not in the results files. The config ESTIMATE is ~35 min saved per incident (ESTIMATE: 27–44 min; manual 30–45 min vs 1–3 min with Titan.Log; assumptions, not measured).
 
 ## Roadmap
 

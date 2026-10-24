@@ -7,6 +7,8 @@ import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 
+from console import analyst_minutes_estimate
+
 ROOT = Path(__file__).resolve().parents[1]
 DECK = ROOT / "pitch" / "deck.html"
 ALLOWED = {
@@ -75,4 +77,17 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     assert f'data-events="{counts["events"]}"' in text
     assert f'data-alerts="{counts["alerts"]}"' in text
     assert f'data-incidents="{counts["incidents"]}"' in text
-    assert "[pending]" in text
+    label = analyst_minutes_estimate()
+    spanish = label.replace(
+        "min saved per incident", "min ahorrados por incidente"
+    ).replace(
+        "with Titan.Log; assumptions, not measured",
+        "con Titan.Log; supuestos, no medido",
+    )
+    writeup = (ROOT / "WRITEUP.md").read_text(encoding="utf-8")
+    assert label in text
+    assert spanish in text
+    assert "ESTIMATE" in spanish
+    assert label in writeup
+    assert "[pending]" not in text
+    assert "[pending]" not in writeup

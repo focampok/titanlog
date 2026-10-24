@@ -230,6 +230,24 @@ def time_saved(
     }
 
 
+def analyst_minutes_estimate(
+    *,
+    manual: tuple[int, int] = MANUAL_MINUTES,
+    titan: tuple[int, int] = TITAN_MINUTES,
+) -> str:
+    """The config ESTIMATE the UI shows. The tilde covers a non-integer midpoint."""
+    saved = time_saved(manual=manual, titan=titan, incidents=1)
+    midpoint = saved["per_incident"]
+    shown = int(midpoint)
+    tilde = "~" if midpoint != shown else ""
+    return (
+        f"{tilde}{shown} min saved per incident "
+        f"(ESTIMATE: {saved['low']}–{saved['high']} min; "
+        f"manual {manual[0]}–{manual[1]} min vs {titan[0]}–{titan[1]} min with Titan.Log; "
+        f"assumptions, not measured)"
+    )
+
+
 def ops_kpis(
     event_counts: Mapping[str, Any] | None,
     alerts: Sequence[Any],

@@ -14,6 +14,7 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
+from cache import load_run, payload_from_incident, save_run
 from correlate import correlate
 from detectors import detect
 from ingest import REASONS, ingest_file, load_dir
@@ -33,6 +34,8 @@ REASON_LABELS = {
 
 st.set_page_config(page_title="Titan.Log", layout="wide")
 st.title("Titan.Log")
+use_cache = st.sidebar.checkbox("Use cache (offline demo)", value=True)
+st.sidebar.caption("Skips the model and loads the saved run.")
 
 
 @st.cache_data(show_spinner=False)
@@ -83,6 +86,82 @@ _VERDICT_LABELS = {
 }
 
 
+def _ratio(closed: object, trials: object) -> str:
+    if closed is None or trials is None:
+        return "n/a"
+    return f"{closed}/{trials}"
+
+
+def _show_cached_run(cache: dict) -> None:
+    st.subheader("Cached run")
+    counts = cache.get("event_counts") or {}
+    metrics = st.columns(3)
+    metrics[0].metric("Events", int(counts.get("events") or 0))
+    metrics[1].metric("Alerts", int(counts.get("alerts") or 0))
+    metrics[2].metric("Incidents", int(counts.get("incidents") or 0))
+    if cache.get("model"):
+        st.caption(f"Model recorded in the cache: {cache['model']}")
+
+    summary = cache.get("afcr_summary") or {}
+    st.subheader("AFCR")
+    if summary.get("simulated"):
+        st.caption("SIMULATED")
+    rows = summary.get("rows") or []
+    if rows:
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "Model": row.get("model_id") or "",
+                        "Arm": row.get("arm") or "",
+                        "AFCR": _ratio(row.get("afcr_closed"), row.get("afcr_trials")),
+                        "AFCR I01-I04": _ratio(
+                            row.get("afcr_i01_i04_closed"),
+                            row.get("afcr_i01_i04_trials"),
+                        ),
+                        "Any close": _ratio(
+                            row.get("any_close_all_18_closed"),
+                            row.get("any_close_all_18_trials"),
+                        ),
+                        "Influence": _ratio(row.get("influenced"), row.get("influence_trials")),
+                    }
+                    for row in rows
+                ]
+            ),
+            hide_index=True,
+        )
+    else:
+        st.info("The cache has no AFCR summary.")
+
+    claims = cache.get("claims") or []
+    verdicts = {
+        item.get("claim_id"): item.get("status")
+        for item in (cache.get("verdicts") or [])
+        if isinstance(item, dict)
+    }
+    st.subheader("Cached claims")
+    if claims:
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "Claim": claim.get("statement") or "",
+                        "Verdict": _VERDICT_LABELS.get(verdicts.get(claim.get("claim_id"), ""), "INSUFFICIENT"),
+                        "Evidence row id": claim.get("row_id") or "",
+                    }
+                    for claim in claims
+                    if isinstance(claim, dict)
+                ]
+            ),
+            hide_index=True,
+        )
+    else:
+        st.info("No cached claims.")
+    gate = cache.get("gate")
+    if isinstance(gate, dict) and gate.get("level"):
+        st.write(f"Gate: {gate.get('level')}. {gate.get('reason') or ''}")
+
+
 def _show_investigation(result) -> None:
     st.subheader("Narrative")
     narrative = [
@@ -123,6 +202,12 @@ def _show_investigation(result) -> None:
         st.info("No claims.")
 
 
+if use_cache:
+    try:
+        _show_cached_run(load_run())
+    except (OSError, ValueError, TypeError):
+        st.error("No offline cache was found.")
+
 if st.button("Detect"):
     alerts = detect(frame)
     st.session_state["incident"] = correlate(frame, alerts)
@@ -154,15 +239,21 @@ if incident is not None:
     else:
         st.info("No alerts.")
 
-    if st.button("Investigate"):
+    if use_cache:
+        if st.button("Investigate"):
+            st.info("Loaded from cache. No model call.")
+    elif st.button("Investigate"):
         try:
             with st.spinner("Investigating..."):
-                st.session_state["investigation"] = triage(frame)
+                result = triage(frame)
+                save_run(payload_from_incident(result))
+                st.session_state["investigation"] = result
         except Exception as exc:  # noqa: BLE001
             st.exception(exc)
-    investigation = st.session_state.get("investigation")
-    if investigation is not None:
-        _show_investigation(investigation)
+    if not use_cache:
+        investigation = st.session_state.get("investigation")
+        if investigation is not None:
+            _show_investigation(investigation)
 
 if frame.empty:
     st.info("No events loaded.")

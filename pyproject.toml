@@ -1,0 +1,28 @@
+[project]
+name = "titanlog"
+version = "0.1.0"
+description = "Trust layer for autonomous SOC investigation agents"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "streamlit==1.66.1",
+    "pandas==3.1.0",
+    "pydantic==2.14.1",
+    "openai==3.37.0",
+    "python-dotenv==1.2.4",
+    "orjson==3.13.0",
+    "httpx==0.28.1",
+    "networkx",
+    "pyvis",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "ruff",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

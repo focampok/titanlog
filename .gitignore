@@ -4,5 +4,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 results/
+data/quarantine/*
+!data/quarantine/.gitkeep
 .streamlit/secrets.toml
 planning/

@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Event(BaseModel):
@@ -29,6 +29,7 @@ class Event(BaseModel):
     service_name: str | None = None
     service_path: str | None = None
     has_attacker_controlled_field: bool = False
+    truncated: bool = False
     source_file: str
     raw: dict[str, Any]
 
@@ -54,14 +55,19 @@ class Event(BaseModel):
             "service.name": self.service_name,
             "service.path": self.service_path,
             "has_attacker_controlled_field": self.has_attacker_controlled_field,
+            "truncated": self.truncated,
             "source_file": self.source_file,
             "raw": self.raw,
         }
 
 
 class IngestReport(BaseModel):
-    """Counts for one file. Quarantine details arrive with robust ingest."""
+    """One file. Bad input is counted and quarantined; status is not a verdict."""
 
-    source_file: str
-    parsed: int
+    parsed: int = 0
+    skipped_by_reason: dict[str, int] = Field(default_factory=dict)
+    quarantined_path: list[str] = Field(default_factory=list)
+    unknown_event_ids: list[int] = Field(default_factory=list)
+    status: str = ""
+    source_file: str = ""
     skipped: int = 0

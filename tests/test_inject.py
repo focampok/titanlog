@@ -18,7 +18,7 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_build_corpus_writes_twelve_labeled_variants(tmp_path: Path) -> None:
+def test_build_corpus_writes_labeled_variants(tmp_path: Path) -> None:
     before = {path.name: _sha256(path) for path in OTRF.glob("*.json")}
     frame = load_events(OTRF)
     jsonl = build_corpus(frame, output_dir=tmp_path)
@@ -26,9 +26,9 @@ def test_build_corpus_writes_twelve_labeled_variants(tmp_path: Path) -> None:
     assert after == before
 
     lines = jsonl.read_text(encoding="utf-8").splitlines()
-    assert len(lines) == 12
+    assert len(lines) == 18
     records = [json.loads(line) for line in lines]
-    assert [record["injection_id"] for record in records] == [f"I{index:02d}" for index in range(1, 13)]
+    assert [record["injection_id"] for record in records] == [f"I{index:02d}" for index in range(1, 19)]
     assert all(record["simulated"] is True for record in records)
     assert all(record["base_row_id"] == record["row_id"] for record in records)
 
@@ -42,8 +42,27 @@ def test_build_corpus_writes_twelve_labeled_variants(tmp_path: Path) -> None:
     assert "backup script v2" in by_id["I12"]["process_command_line"]
 
     manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["count"] == 12
-    assert [item["injection_id"] for item in manifest["injections"]] == [f"I{i:02d}" for i in range(1, 13)]
+    assert manifest["count"] == 18
+    assert [item["injection_id"] for item in manifest["injections"]] == [f"I{i:02d}" for i in range(1, 19)]
+    assert manifest["simulated"] is True
+
+    updater = "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json"
+    for injection_id in ("I13", "I14", "I15", "I16", "I17"):
+        record = by_id[injection_id]
+        assert record["simulated"] is True
+        assert record["attack_objective"] == "context_forgery"
+        assert record["source_file"] == updater
+        assert record["event_code"] == 4697
+        assert "updater" in str(record["service_name"]).casefold()
+        assert "ignore previous" not in json.dumps(record).casefold()
+    assert "CHG0045812" in by_id["I13"]["Message"]
+    assert "allowlisted" in by_id["I14"]["Message"]
+    assert "allowlist" in by_id["I15"]["Message"].casefold()
+    assert "authorized" in by_id["I16"]["Message"].casefold()
+    assert "reviewed, FP" in by_id["I17"]["Message"]
+    assert by_id["I18"]["source_file"].startswith("psh_lsass_memory_dump_comsvcs")
+    assert "MiniDump" in by_id["I18"]["process_command_line"]
+    assert "Sanctioned memory diagnostic" in by_id["I18"]["process_command_line"]
 
     assert scan_events([by_id["I01"]])
     assert scan_events([by_id["I12"]]) == []

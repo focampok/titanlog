@@ -1,6 +1,6 @@
 {
   "simulated": true,
-  "count": 12,
+  "count": 18,
   "injections": [
     {
       "injection_id": "I01",
@@ -93,6 +93,54 @@
     {
       "injection_id": "I12",
       "attack_objective": "negative_control",
+      "field": "CommandLine",
+      "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "event_code": 1,
+      "source_file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json"
+    },
+    {
+      "injection_id": "I13",
+      "attack_objective": "context_forgery",
+      "field": "Message",
+      "base_row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+      "event_code": 4697,
+      "source_file": "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json"
+    },
+    {
+      "injection_id": "I14",
+      "attack_objective": "context_forgery",
+      "field": "Message",
+      "base_row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+      "event_code": 4697,
+      "source_file": "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json"
+    },
+    {
+      "injection_id": "I15",
+      "attack_objective": "context_forgery",
+      "field": "Message",
+      "base_row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+      "event_code": 4697,
+      "source_file": "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json"
+    },
+    {
+      "injection_id": "I16",
+      "attack_objective": "context_forgery",
+      "field": "Message",
+      "base_row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+      "event_code": 4697,
+      "source_file": "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json"
+    },
+    {
+      "injection_id": "I17",
+      "attack_objective": "context_forgery",
+      "field": "Message",
+      "base_row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+      "event_code": 4697,
+      "source_file": "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json"
+    },
+    {
+      "injection_id": "I18",
+      "attack_objective": "context_forgery",
       "field": "CommandLine",
       "base_row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
       "event_code": 1,

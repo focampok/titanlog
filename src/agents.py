@@ -161,37 +161,20 @@ def claims_from_alerts(alerts: list[Alert]) -> list[Claim]:
     return evidence + _technique_claims(evidence)
 
 
-def recommend_gate(claims: list[Claim], verdicts: list[ClaimVerdict]) -> GateRecommendation:
-    """Recommend disable_account from Oracle verdicts.
+def recommend_gate(
+    claims: list[Claim],
+    verdicts: list[ClaimVerdict],
+    *,
+    tai: bool = False,
+) -> GateRecommendation:
+    """Recommend disable_account. P0 impact is high, so this does not return AUTO.
 
-    P0 patterns are high impact, so this does not return AUTO.
-    A rejected evidence claim blocks the action.
-    A rejected authorization claim does not authorize a close and does not,
-    by itself, block containment that verified evidence already supports.
+    A rejected evidence claim blocks the action. A rejected authorization claim
+    does not, by itself, block containment that verified evidence already supports.
     """
-    by_id = {verdict.claim_id: verdict for verdict in verdicts}
-    statuses = [
-        by_id[claim.claim_id].status
-        for claim in claims
-        if claim.claim_type in _EVIDENCE and claim.claim_id in by_id
-    ]
-    if any(status == "REJECTED" for status in statuses):
-        return GateRecommendation(
-            level="DENY",
-            action="disable_account",
-            reason="An evidence claim was rejected. Containment stays blocked.",
-        )
-    if any(status == "VERIFIED" for status in statuses):
-        return GateRecommendation(
-            level="APPROVE",
-            action="disable_account",
-            reason="Verified evidence supports disabling the account. A human approves this action.",
-        )
-    return GateRecommendation(
-        level="APPROVE",
-        action="none",
-        reason="No verified evidence. No containment action is recommended.",
-    )
+    from gate import propose
+
+    return propose(claims, verdicts, tai=tai, privileged=True)
 
 
 def decision_from_verdicts(

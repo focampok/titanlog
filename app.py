@@ -15,8 +15,9 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from cache import investigation_view, load_run, payload_from_incident, save_run
-from correlate import correlate
+from correlate import GateRecommendation, correlate
 from detectors import detect
+from gate import execute, record_audit
 from ingest import REASONS, ingest_file, load_dir
 from titanlog import triage
 
@@ -129,7 +130,7 @@ def _show_cached_run(cache: dict) -> None:
     _show_investigation_view(investigation_view(cache))
 
 
-def _show_investigation_view(view: dict) -> None:
+def _show_investigation_view(view: dict, *, controls: bool = True) -> None:
     model = view.get("model") or ""
     host = view.get("provider_host") or ""
     if model or host:
@@ -161,6 +162,46 @@ def _show_investigation_view(view: dict) -> None:
         st.info("No claims.")
     if view.get("gate"):
         st.write(view["gate"])
+    if controls:
+        _show_gate_controls(view)
+
+
+def _show_gate_controls(view: dict) -> None:
+    level = view.get("gate_level") or ""
+    action = view.get("gate_action") or ""
+    evidence_ids = list(view.get("evidence_claim_ids") or [])
+    if level == "AUTO" and action == "disable_account":
+        token = "AUTO:" + ",".join(evidence_ids)
+        if st.session_state.get("gate_auto") != token:
+            execute(
+                _decision(level, action),
+                actor="titan",
+                evidence_ids=evidence_ids,
+            )
+            st.session_state["gate_auto"] = token
+        st.info("AUTO: the mock disable_account action was recorded.")
+        return
+    if level != "APPROVE" or action != "disable_account":
+        return
+    st.write("Approve or deny disable_account.")
+    approve, deny = st.columns(2)
+    decision = _decision(level, action)
+    if approve.button("Approve"):
+        execute(decision, actor="analyst", evidence_ids=evidence_ids)
+        st.success("Approved. The mock disable_account action was recorded.")
+    if deny.button("Deny"):
+        record_audit(
+            actor="analyst",
+            action="disable_account",
+            evidence_ids=evidence_ids,
+            gate_decision="DENY",
+            executed=False,
+        )
+        st.warning("Denied. No action was executed.")
+
+
+def _decision(level: str, action: str) -> GateRecommendation:
+    return GateRecommendation(level=level, action=action, reason="")
 
 
 def _show_investigation(result) -> None:
@@ -208,7 +249,7 @@ if incident is not None:
         if st.button("Investigate"):
             st.info("Loaded from cache. No model call.")
             try:
-                _show_investigation_view(investigation_view(load_run()))
+                _show_investigation_view(investigation_view(load_run()), controls=False)
             except (OSError, ValueError, TypeError):
                 st.error("No offline cache was found.")
     elif st.button("Investigate"):

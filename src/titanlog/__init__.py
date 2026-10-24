@@ -34,12 +34,14 @@ def triage(events: list[Event]) -> Incident:
     from agents import decision_from_verdicts, investigate, recommend_gate
     from correlate import correlate
     from detectors import detect
+    from inject_scan import scan_events
 
     alerts = detect(events)
     incident = correlate(events, alerts)
     investigation = investigate(incident, events, alerts, mode="titan")
     verdicts = verify(investigation.claims, events)
     severity, close, rationale = decision_from_verdicts(alerts, investigation.claims, verdicts)
+    tai = bool(scan_events(events))
     return incident.model_copy(
         update={
             "claims": investigation.claims,
@@ -47,7 +49,7 @@ def triage(events: list[Event]) -> Incident:
             "severity": severity,
             "close": close,
             "rationale": rationale,
-            "gate": recommend_gate(investigation.claims, verdicts),
+            "gate": recommend_gate(investigation.claims, verdicts, tai=tai),
             "model_id": investigation.model_id,
             "base_url_host": investigation.base_url_host,
             "llm_fallback": investigation.fallback,

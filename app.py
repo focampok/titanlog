@@ -1113,6 +1113,14 @@ def _about_tab() -> None:
     st.markdown(
         "**Repository:** [github.com/focampok/titanlog](https://github.com/focampok/titanlog)"
     )
+    deck_path = ROOT / "pitch" / "deck.html"
+    if deck_path.is_file():
+        st.download_button(
+            "Download pitch deck",
+            data=deck_path.read_bytes(),
+            file_name="deck.html",
+            mime="text/html",
+        )
     st.markdown(
         "**Data and frameworks**\n"
         "- OTRF Security Datasets (MIT): `empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json`, "

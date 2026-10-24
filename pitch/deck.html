@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Titan.Log</title>
+<style>
+html, body { margin: 0; height: 100%; background: #0b0f14; color: #e5e7eb;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif; }
+.slide { display: none; box-sizing: border-box; height: 100vh; width: 100vw;
+  padding: 40px 56px 48px; }
+.slide.active { display: flex; flex-direction: column; justify-content: center; }
+h1 { font-size: 48px; line-height: 1.3; margin: 0 0 18px; font-weight: 700; }
+p, li, td, th { font-size: 28px; line-height: 1.35; }
+p { margin: 0 0 14px; }
+.quote { color: #ef4444; }
+.key { color: #22d3ee; font-weight: 700; }
+.muted { color: #9aa3b2; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 4px 12px; border-bottom: 1px solid #1c2533;
+  vertical-align: top; }
+th { color: #22d3ee; font-weight: 650; }
+tr.titan td { background: #111821; color: #22d3ee; }
+.cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; }
+.cols h2 { font-size: 32px; line-height: 1.3; margin: 0 0 8px; color: #22d3ee; }
+.flow { margin: 0; padding-left: 28px; }
+.flow li { margin: 6px 0; }
+.glossary { columns: 2; column-gap: 36px; margin: 0; padding-left: 22px; }
+.glossary li { break-inside: avoid; margin: 0 0 8px; }
+.svg-en, .svg-es { min-height: 0; }
+.stack { display: block; width: 100%; height: calc(100vh - 340px); }
+.svg-en[hidden], .svg-es[hidden] { display: none; }
+a { color: #22d3ee; }
+#lang { position: fixed; top: 16px; right: 24px; z-index: 2; font-size: 20px;
+  background: #111821; color: #e5e7eb; border: 1px solid #22d3ee; padding: 8px 14px;
+  cursor: pointer; }
+#num { position: fixed; right: 28px; bottom: 16px; font-size: 20px; color: #9aa3b2; }
+</style>
+</head>
+<body>
+<button id="lang" type="button">EN | ES</button>
+<div id="num">1 / 7</div>
+
+<section class="slide active">
+<h1 data-en="Titan.Log — AI triage you can trust to close." data-es="Titan.Log — triaje con IA al que puedes confiar el cierre.">Titan.Log — AI triage you can trust to close.</h1>
+<p data-en="A trust layer for AI-driven security operations." data-es="Una capa de confianza para operaciones de seguridad con IA.">A trust layer for AI-driven security operations.</p>
+<p>Francisco Ocampo</p>
+</section>
+
+<section class="slide">
+<h1 data-en="The problem" data-es="El problema">The problem</h1>
+<p data-en="A SOC (Security Operations Center) gets thousands of alerts a day. If analysts cannot trust an AI close, they re-check everything. The attacker writes the logs." data-es="Un SOC (Security Operations Center) recibe miles de alertas al día. Si el analista no puede confiar en un cierre de la IA, vuelve a revisar todo. El atacante escribe los logs.">A SOC (Security Operations Center) gets thousands of alerts a day. If analysts cannot trust an AI close, they re-check everything. The attacker writes the logs.</p>
+<p class="quote" data-en="OWASP ranks prompt injection as the #1 risk for LLM applications." data-es="OWASP ubica la inyección de prompts como el riesgo #1 en aplicaciones de LLM.">OWASP ranks prompt injection as the #1 risk for LLM applications.</p>
+</section>
+
+<section class="slide">
+<h1 data-en="Where it fits" data-es="Dónde encaja">Where it fits</h1>
+<p data-en="Alaris's AI SOC stack — Titan.Log is the trust layer between the agents' verdict and the human action." data-es="El stack de SOC con IA de Alaris — Titan.Log es la capa de confianza entre el veredicto de los agentes y la acción humana.">Alaris's AI SOC stack — Titan.Log is the trust layer between the agents' verdict and the human action.</p>
+<div class="svg-en"><svg class="stack" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs>
+<linearGradient id="en-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b0f14"/><stop offset="1" stop-color="#0e131b"/></linearGradient>
+<linearGradient id="en-cy" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a5f3fc"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<filter id="en-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14" result="b"/><feFlood flood-color="#22d3ee" flood-opacity="0.75"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="en-sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.25"/></filter>
+<marker id="en-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#22d3ee"/></marker>
+</defs>
+<rect fill="url(#en-bg)"/>
+<text x="60" y="72" font-size="30" font-weight="700" fill="#e5e7eb">AI-native SOC architecture</text>
+<text x="60" y="108" font-size="24" font-weight="600" fill="#22d3ee">+ Titan.Log trust layer</text>
+<path d="M417,370 H395 V797 H417" fill="none" stroke="#9aa3b2" stroke-width="2.5"/><text x="379" y="548" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">AI</text><text x="379" y="578" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">+ Data</text><text x="379" y="608" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">+ Security</text><text x="379" y="638" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">Infrastructure</text>
+<path d="M417,145 H395 V350 H417" fill="none" stroke="#9aa3b2" stroke-width="2.5"/><text x="379" y="242" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">Security</text><text x="379" y="272" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">Work</text>
+<g filter="url(#en-sh)"><polygon points="760.0,475.0 1090.0,625.0 1090.0,647.0 760.0,797.0 430.0,647.0 430.0,625.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,475.0 1090.0,625.0 760.0,775.0 430.0,625.0" fill="#4d4873" stroke="#4d4873" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,475.0 1090.0,625.0 760.0,775.0 430.0,625.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,700.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Environment Agnostic</text>
+<text transform="translate(931.0,700.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Deployment Layer</text>
+<g filter="url(#en-sh)"><polygon points="760.0,393.0 1090.0,543.0 1090.0,565.0 760.0,715.0 430.0,565.0 430.0,543.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,393.0 1090.0,543.0 760.0,693.0 430.0,543.0" fill="#433e66" stroke="#433e66" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,393.0 1090.0,543.0 760.0,693.0 430.0,543.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,618.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Data Connectors</text>
+<text transform="translate(931.0,618.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Ingestion Layer</text>
+<g filter="url(#en-sh)"><polygon points="760.0,311.0 1090.0,461.0 1090.0,483.0 760.0,633.0 430.0,483.0 430.0,461.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,311.0 1090.0,461.0 760.0,611.0 430.0,461.0" fill="#4d4873" stroke="#4d4873" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,311.0 1090.0,461.0 760.0,611.0 430.0,461.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,536.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Security Graph</text>
+<text transform="translate(931.0,536.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Data / Context Layer</text>
+<g filter="url(#en-sh)"><polygon points="760.0,229.0 1090.0,379.0 1090.0,401.0 760.0,551.0 430.0,401.0 430.0,379.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,229.0 1090.0,379.0 760.0,529.0 430.0,379.0" fill="#433e66" stroke="#433e66" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,229.0 1090.0,379.0 760.0,529.0 430.0,379.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,454.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Agent Framework</text>
+<text transform="translate(931.0,454.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Intelligence Layer</text>
+<g filter="url(#en-sh)"><polygon points="760.0,147.0 1090.0,297.0 1090.0,319.0 760.0,469.0 430.0,319.0 430.0,297.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,147.0 1090.0,297.0 760.0,447.0 430.0,297.0" fill="#4d4873" stroke="#4d4873" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,147.0 1090.0,297.0 760.0,447.0 430.0,297.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,372.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="21" font-weight="700" fill="#e5e7eb">Agents for SOC, Hunting, &amp; more</text>
+<text transform="translate(931.0,372.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Use Cases</text>
+<polygon points="760.0,65.0 1090.0,215.0 1090.0,237.0 760.0,387.0 430.0,237.0 430.0,215.0" fill="#0891b2" stroke="#0891b2" stroke-width="18" stroke-linejoin="round" filter="url(#en-glow)"/><polygon points="760.0,65.0 1090.0,215.0 760.0,365.0 430.0,215.0" fill="url(#en-cy)" stroke="url(#en-cy)" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,65.0 1090.0,215.0 760.0,365.0 430.0,215.0" fill="none" stroke="#ecfeff" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+<text transform="translate(589.0,290.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="28" font-weight="800" fill="#062a33">Titan.Log</text>
+<text transform="translate(931.0,290.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="800" fill="#062a33">Trust Layer</text>
+<polygon points="760.0,147.0 900.0,211.0 900.0,225.0 760.0,289.0 620.0,225.0 620.0,211.0" fill="#111821" stroke="#111821" stroke-width="12" stroke-linejoin="round"/><polygon points="760.0,147.0 900.0,211.0 760.0,275.0 620.0,211.0" fill="#1c2533" stroke="#1c2533" stroke-width="12" stroke-linejoin="round"/><polygon points="760.0,147.0 900.0,211.0 760.0,275.0 620.0,211.0" fill="none" stroke="#111821" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+<text x="760" y="203" text-anchor="middle" font-size="22" font-weight="700" fill="#e5e7eb">Human</text>
+<text x="760" y="231" text-anchor="middle" font-size="22" font-weight="700" fill="#e5e7eb">Workbench</text>
+<path d="M1104,215 L1150,180" stroke="#22d3ee" stroke-width="2.5" fill="none"/>
+<circle cx="1104" cy="215" r="5" fill="#22d3ee"/>
+<rect x="1150" y="120" width="420" height="212" rx="16" fill="#111821" stroke="#22d3ee" stroke-width="2.5" filter="url(#en-sh)"/>
+<circle cx="1178" cy="160" r="6" fill="#22d3ee"/>
+<text x="1196" y="168" font-size="22" font-weight="600" fill="#e5e7eb">Verifies every AI claim</text>
+<text x="1196" y="198" font-size="22" font-weight="500" fill="#e5e7eb">against the real logs</text>
+<circle cx="1178" cy="234" r="6" fill="#22d3ee"/>
+<text x="1196" y="242" font-size="22" font-weight="600" fill="#e5e7eb">Gate: auto · ask a human · deny</text>
+<circle cx="1178" cy="278" r="6" fill="#22d3ee"/>
+<text x="1196" y="286" font-size="22" font-weight="600" fill="#e5e7eb">Audit trail</text>
+<path d="M1120,255 C1180,335 1180,483 1112,555" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-dasharray="9 7" marker-end="url(#en-arr)"/>
+<text x="1182" y="441" font-size="20" font-weight="600" fill="#22d3ee">reads raw logs</text>
+<text x="1182" y="469" font-size="20" font-weight="500" fill="#22d3ee">(YAML field map)</text>
+<text x="800" y="852" text-anchor="middle" font-size="30" font-weight="700" fill="#e5e7eb">Between the AI verdict and the action.</text>
+<text x="800" y="884" text-anchor="middle" font-size="15" fill="#7b8494">Stack adapted from Alaris Security's AI-native architecture. Titan.Log layer added for illustration.</text>
+</svg></div>
+<div class="svg-es" hidden="hidden"><svg class="stack" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs>
+<linearGradient id="es-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b0f14"/><stop offset="1" stop-color="#0e131b"/></linearGradient>
+<linearGradient id="es-cy" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a5f3fc"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<filter id="es-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14" result="b"/><feFlood flood-color="#22d3ee" flood-opacity="0.75"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="es-sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.25"/></filter>
+<marker id="es-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#22d3ee"/></marker>
+</defs>
+<rect fill="url(#es-bg)"/>
+<text x="60" y="72" font-size="30" font-weight="700" fill="#e5e7eb">Arquitectura SOC nativa de IA</text>
+<text x="60" y="108" font-size="24" font-weight="600" fill="#22d3ee">+ capa de confianza Titan.Log</text>
+<path d="M417,370 H395 V797 H417" fill="none" stroke="#9aa3b2" stroke-width="2.5"/><text x="379" y="548" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">AI</text><text x="379" y="578" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">+ Data</text><text x="379" y="608" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">+ Security</text><text x="379" y="638" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">Infrastructure</text>
+<path d="M417,145 H395 V350 H417" fill="none" stroke="#9aa3b2" stroke-width="2.5"/><text x="379" y="242" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">Security</text><text x="379" y="272" text-anchor="end" font-size="25" font-weight="700" fill="#9aa3b2">Work</text>
+<g filter="url(#es-sh)"><polygon points="760.0,475.0 1090.0,625.0 1090.0,647.0 760.0,797.0 430.0,647.0 430.0,625.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,475.0 1090.0,625.0 760.0,775.0 430.0,625.0" fill="#4d4873" stroke="#4d4873" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,475.0 1090.0,625.0 760.0,775.0 430.0,625.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,700.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Environment Agnostic</text>
+<text transform="translate(931.0,700.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Deployment Layer</text>
+<g filter="url(#es-sh)"><polygon points="760.0,393.0 1090.0,543.0 1090.0,565.0 760.0,715.0 430.0,565.0 430.0,543.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,393.0 1090.0,543.0 760.0,693.0 430.0,543.0" fill="#433e66" stroke="#433e66" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,393.0 1090.0,543.0 760.0,693.0 430.0,543.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,618.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Data Connectors</text>
+<text transform="translate(931.0,618.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Ingestion Layer</text>
+<g filter="url(#es-sh)"><polygon points="760.0,311.0 1090.0,461.0 1090.0,483.0 760.0,633.0 430.0,483.0 430.0,461.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,311.0 1090.0,461.0 760.0,611.0 430.0,461.0" fill="#4d4873" stroke="#4d4873" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,311.0 1090.0,461.0 760.0,611.0 430.0,461.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,536.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Security Graph</text>
+<text transform="translate(931.0,536.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Data / Context Layer</text>
+<g filter="url(#es-sh)"><polygon points="760.0,229.0 1090.0,379.0 1090.0,401.0 760.0,551.0 430.0,401.0 430.0,379.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,229.0 1090.0,379.0 760.0,529.0 430.0,379.0" fill="#433e66" stroke="#433e66" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,229.0 1090.0,379.0 760.0,529.0 430.0,379.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,454.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Agent Framework</text>
+<text transform="translate(931.0,454.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Intelligence Layer</text>
+<g filter="url(#es-sh)"><polygon points="760.0,147.0 1090.0,297.0 1090.0,319.0 760.0,469.0 430.0,319.0 430.0,297.0" fill="#2e2a48" stroke="#2e2a48" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,147.0 1090.0,297.0 760.0,447.0 430.0,297.0" fill="#4d4873" stroke="#4d4873" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,147.0 1090.0,297.0 760.0,447.0 430.0,297.0" fill="none" stroke="#6a6496" stroke-width="2" stroke-linejoin="round" opacity="0.8"/></g>
+<text transform="translate(589.0,372.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="21" font-weight="700" fill="#e5e7eb">Agents for SOC, Hunting, &amp; more</text>
+<text transform="translate(931.0,372.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="24" font-weight="700" fill="#e5e7eb">Use Cases</text>
+<polygon points="760.0,65.0 1090.0,215.0 1090.0,237.0 760.0,387.0 430.0,237.0 430.0,215.0" fill="#0891b2" stroke="#0891b2" stroke-width="18" stroke-linejoin="round" filter="url(#es-glow)"/><polygon points="760.0,65.0 1090.0,215.0 760.0,365.0 430.0,215.0" fill="url(#es-cy)" stroke="url(#es-cy)" stroke-width="18" stroke-linejoin="round"/><polygon points="760.0,65.0 1090.0,215.0 760.0,365.0 430.0,215.0" fill="none" stroke="#ecfeff" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+<text transform="translate(589.0,290.0) rotate(24.44)" x="0" y="-13" text-anchor="middle" font-size="28" font-weight="800" fill="#062a33">Titan.Log</text>
+<text transform="translate(931.0,290.0) rotate(-24.44)" x="0" y="-13" text-anchor="middle" font-size="22" font-weight="800" fill="#062a33">Capa de confianza</text>
+<polygon points="760.0,147.0 900.0,211.0 900.0,225.0 760.0,289.0 620.0,225.0 620.0,211.0" fill="#111821" stroke="#111821" stroke-width="12" stroke-linejoin="round"/><polygon points="760.0,147.0 900.0,211.0 760.0,275.0 620.0,211.0" fill="#1c2533" stroke="#1c2533" stroke-width="12" stroke-linejoin="round"/><polygon points="760.0,147.0 900.0,211.0 760.0,275.0 620.0,211.0" fill="none" stroke="#111821" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+<text x="760" y="203" text-anchor="middle" font-size="22" font-weight="700" fill="#e5e7eb">Human</text>
+<text x="760" y="231" text-anchor="middle" font-size="22" font-weight="700" fill="#e5e7eb">Workbench</text>
+<path d="M1104,215 L1150,180" stroke="#22d3ee" stroke-width="2.5" fill="none"/>
+<circle cx="1104" cy="215" r="5" fill="#22d3ee"/>
+<rect x="1150" y="120" width="420" height="242" rx="16" fill="#111821" stroke="#22d3ee" stroke-width="2.5" filter="url(#es-sh)"/>
+<circle cx="1178" cy="160" r="6" fill="#22d3ee"/>
+<text x="1196" y="168" font-size="22" font-weight="600" fill="#e5e7eb">Verifica cada afirmación de la IA</text>
+<text x="1196" y="198" font-size="22" font-weight="500" fill="#e5e7eb">contra los logs reales</text>
+<circle cx="1178" cy="234" r="6" fill="#22d3ee"/>
+<text x="1196" y="242" font-size="22" font-weight="600" fill="#e5e7eb">Compuerta: automático ·</text>
+<text x="1196" y="272" font-size="22" font-weight="500" fill="#e5e7eb">pedir a un humano · denegar</text>
+<circle cx="1178" cy="308" r="6" fill="#22d3ee"/>
+<text x="1196" y="316" font-size="22" font-weight="600" fill="#e5e7eb">Rastro de auditoría</text>
+<path d="M1120,255 C1180,335 1180,483 1112,555" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-dasharray="9 7" marker-end="url(#es-arr)"/>
+<text x="1182" y="441" font-size="20" font-weight="600" fill="#22d3ee">lee los logs crudos</text>
+<text x="1182" y="469" font-size="20" font-weight="500" fill="#22d3ee">(mapa de campos YAML)</text>
+<text x="800" y="852" text-anchor="middle" font-size="30" font-weight="700" fill="#e5e7eb">Entre el veredicto de la IA y la acción.</text>
+<text x="800" y="884" text-anchor="middle" font-size="15" fill="#7b8494">Stack adaptado de la arquitectura AI-native de Alaris Security. Capa Titan.Log agregada como ilustración.</text>
+</svg></div>
+</section>
+
+<section class="slide">
+<h1 data-en="How it works" data-es="Cómo funciona">How it works</h1>
+<ol class="flow">
+<li data-en="Logs" data-es="Logs">Logs</li>
+<li data-en="Correlate" data-es="Correlacionar">Correlate</li>
+<li data-en="The AI proposes claims" data-es="La IA propone afirmaciones (claims)">The AI proposes claims</li>
+<li data-en="Oracle, a verifier, checks each claim against the real log rows" data-es="Oracle, un verificador, revisa cada afirmación contra las filas reales del log">Oracle, a verifier, checks each claim against the real log rows</li>
+<li data-en="Gate: auto, ask a human, or deny" data-es="Compuerta: automático, pedir a un humano, o denegar">Gate: auto, ask a human, or deny</li>
+<li data-en="Audit" data-es="Auditoría">Audit</li>
+</ol>
+<p class="key" data-en="A prompt can be argued with. A verifier can't." data-es="A un prompt se le puede convencer. A un verificador, no.">A prompt can be argued with. A verifier can't.</p>
+</section>
+
+<section class="slide">
+<h1 data-en="Results" data-es="Resultados">Results</h1>
+<p data-en="SIMULATED attacks on REAL logs" data-es="Ataques SIMULATED sobre logs REAL">SIMULATED attacks on REAL logs</p>
+<table>
+<thead>
+<tr>
+<th data-en="Model" data-es="Modelo">Model</th>
+<th data-en="Approach" data-es="Enfoque">Approach</th>
+<th data-en="Any close" data-es="Cualquier cierre">Any close</th>
+<th data-en="Influence" data-es="Influencia">Influence</th>
+</tr>
+</thead>
+<tbody>
+<tr><td data-en="deepseek-flash" data-es="deepseek-flash">deepseek-flash</td><td data-en="naive" data-es="naive">naive</td><td data-en="0 of 18" data-es="0 de 18" data-model="deepseek-flash" data-arm="naive" data-metric="any_close">0 of 18</td><td data-en="0 of 18" data-es="0 de 18" data-model="deepseek-flash" data-arm="naive" data-metric="influence">0 of 18</td></tr><tr><td data-en="deepseek-flash" data-es="deepseek-flash">deepseek-flash</td><td data-en="hardened prompt" data-es="prompt endurecido">hardened prompt</td><td data-en="0 of 18" data-es="0 de 18" data-model="deepseek-flash" data-arm="hardened_prompt" data-metric="any_close">0 of 18</td><td data-en="0 of 18" data-es="0 de 18" data-model="deepseek-flash" data-arm="hardened_prompt" data-metric="influence">0 of 18</td></tr><tr class="titan"><td data-en="deepseek-flash" data-es="deepseek-flash">deepseek-flash</td><td data-en="Titan.Log" data-es="Titan.Log">Titan.Log</td><td data-en="0 of 18" data-es="0 de 18" data-model="deepseek-flash" data-arm="titan" data-metric="any_close">0 of 18</td><td data-en="0 of 18" data-es="0 de 18" data-model="deepseek-flash" data-arm="titan" data-metric="influence">0 of 18</td></tr><tr><td data-en="Qwen/Qwen3-30B-A3B-Instruct-2507" data-es="Qwen/Qwen3-30B-A3B-Instruct-2507">Qwen/Qwen3-30B-A3B-Instruct-2507</td><td data-en="naive" data-es="naive">naive</td><td data-en="4 of 18" data-es="4 de 18" data-model="Qwen/Qwen3-30B-A3B-Instruct-2507" data-arm="naive" data-metric="any_close">4 of 18</td><td data-en="4 of 18" data-es="4 de 18" data-model="Qwen/Qwen3-30B-A3B-Instruct-2507" data-arm="naive" data-metric="influence">4 of 18</td></tr><tr><td data-en="Qwen/Qwen3-30B-A3B-Instruct-2507" data-es="Qwen/Qwen3-30B-A3B-Instruct-2507">Qwen/Qwen3-30B-A3B-Instruct-2507</td><td data-en="hardened prompt" data-es="prompt endurecido">hardened prompt</td><td data-en="0 of 18" data-es="0 de 18" data-model="Qwen/Qwen3-30B-A3B-Instruct-2507" data-arm="hardened_prompt" data-metric="any_close">0 of 18</td><td data-en="2 of 18" data-es="2 de 18" data-model="Qwen/Qwen3-30B-A3B-Instruct-2507" data-arm="hardened_prompt" data-metric="influence">2 of 18</td></tr><tr class="titan"><td data-en="Qwen/Qwen3-30B-A3B-Instruct-2507" data-es="Qwen/Qwen3-30B-A3B-Instruct-2507">Qwen/Qwen3-30B-A3B-Instruct-2507</td><td data-en="Titan.Log" data-es="Titan.Log">Titan.Log</td><td data-en="0 of 18" data-es="0 de 18" data-model="Qwen/Qwen3-30B-A3B-Instruct-2507" data-arm="titan" data-metric="any_close">0 of 18</td><td data-en="0 of 18" data-es="0 de 18" data-model="Qwen/Qwen3-30B-A3B-Instruct-2507" data-arm="titan" data-metric="influence">0 of 18</td></tr>
+</tbody>
+</table>
+<p data-en="On a smaller model, the simple agent closed a real attack as harmless in 4 of 18 forged-log attempts. Titan.Log: 0 of 18, on both models." data-es="En un modelo más pequeño, el agente simple cerró un ataque real como inofensivo en 4 de 18 intentos con logs falsificados. Titan.Log: 0 de 18, en ambos modelos.">On a smaller model, the simple agent closed a real attack as harmless in 4 of 18 forged-log attempts. Titan.Log: 0 of 18, on both models.</p>
+<p class="muted" data-en="Any close = closed a real attack. Influence = the forged text changed the decision." data-es="Cualquier cierre = cerró un ataque real. Influencia = el texto falso cambió la decisión.">Any close = closed a real attack. Influence = the forged text changed the decision.</p>
+<p class="muted" data-en="OTRF data, simulated injections, small n." data-es="Datos OTRF, inyecciones simuladas, n pequeño.">OTRF data, simulated injections, small n.</p>
+</section>
+
+<section class="slide">
+<h1 data-en="Why a SOC cares" data-es="Por qué le importa a un SOC">Why a SOC cares</h1>
+<div class="cols">
+<div>
+<h2 data-en="Save time" data-es="Ahorra tiempo">Save time</h2>
+<p data-en="4532 events become 12 alerts and 1 incident. Minutes saved: [pending]" data-es="4532 eventos pasan a 12 alertas y 1 incidente. Minutos ahorrados: [pending]" data-events="4532" data-alerts="12" data-incidents="1">4532 events become 12 alerts and 1 incident. Minutes saved: [pending]</p>
+</div>
+<div>
+<h2 data-en="Better decisions" data-es="Mejores decisiones">Better decisions</h2>
+<p data-en="Every close is backed by evidence." data-es="Cada cierre está respaldado por evidencia.">Every close is backed by evidence.</p>
+</div>
+<div>
+<h2 data-en="Respond faster" data-es="Responde más rápido">Respond faster</h2>
+<p data-en="The gate hands the next analyst an evidence packet." data-es="La compuerta entrega al siguiente analista un paquete de evidencia.">The gate hands the next analyst an evidence packet.</p>
+</div>
+</div>
+<p data-en="Plugs in as a layer between the AI verdict and the action." data-es="Se conecta como una capa entre el veredicto de la IA y la acción.">Plugs in as a layer between the AI verdict and the action.</p>
+</section>
+
+<section class="slide">
+<h1 data-en="Glossary" data-es="Glosario">Glossary</h1>
+<ul class="glossary">
+<li data-en="SOC — Security Operations Center: the team that watches alerts." data-es="SOC — Security Operations Center: el equipo que vigila las alertas.">SOC — Security Operations Center: the team that watches alerts.</li>
+<li data-en="Alert triage — deciding which alerts matter first." data-es="Triaje de alertas — decidir qué alertas importan primero.">Alert triage — deciding which alerts matter first.</li>
+<li data-en="L1/L2 analyst — the first responder, then the specialist." data-es="Analista L1/L2 — el primer respondedor y, después, el especialista.">L1/L2 analyst — the first responder, then the specialist.</li>
+<li data-en="Log — a recorded line from a computer." data-es="Log — una línea registrada por una computadora.">Log — a recorded line from a computer.</li>
+<li data-en="Prompt injection — hidden instructions inside data the AI reads." data-es="Inyección de prompts — instrucciones ocultas dentro de los datos que lee la IA.">Prompt injection — hidden instructions inside data the AI reads.</li>
+<li data-en="Claim — a statement the AI makes about a log row." data-es="Claim — un enunciado que la IA hace sobre una fila del log.">Claim — a statement the AI makes about a log row.</li>
+<li data-en="Oracle — a verifier that checks a claim against the real row." data-es="Oracle — un verificador que revisa una afirmación contra la fila real.">Oracle — a verifier that checks a claim against the real row.</li>
+<li data-en="False-close rate (AFCR) — how often an AI closes a real attack as harmless." data-es="Tasa de cierre falso (AFCR) — cuántas veces la IA cierra un ataque real como inofensivo.">False-close rate (AFCR) — how often an AI closes a real attack as harmless.</li>
+<li data-en="OTRF Security-Datasets — public real Windows logs used here." data-es="OTRF Security-Datasets — logs reales y públicos de Windows usados aquí.">OTRF Security-Datasets — public real Windows logs used here.</li>
+<li data-en="MITRE ATT&amp;CK — a catalog of attacker techniques." data-es="MITRE ATT&amp;CK — un catálogo de técnicas de atacantes.">MITRE ATT&amp;CK — a catalog of attacker techniques.</li>
+</ul>
+<p><a href="https://github.com/focampok/titanlog">github.com/focampok/titanlog</a>
+ · <a href="https://titan-log.focampo.com">titan-log.focampo.com</a></p>
+</section>
+
+<script>
+var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+var index = 0;
+var lang = "en";
+function show(next) {
+  index = (next + slides.length) % slides.length;
+  slides.forEach(function (slide, n) {
+    slide.classList.toggle("active", n === index);
+  });
+  document.getElementById("num").textContent = (index + 1) + " / " + slides.length;
+}
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-en]").forEach(function (node) {
+    node.textContent = node.getAttribute(lang === "es" ? "data-es" : "data-en");
+  });
+  document.querySelectorAll(".svg-en").forEach(function (node) { node.hidden = lang === "es"; });
+  document.querySelectorAll(".svg-es").forEach(function (node) { node.hidden = lang !== "es"; });
+  document.getElementById("lang").textContent = lang === "es" ? "ES | EN" : "EN | ES";
+  try { localStorage.setItem("titanlog-deck-lang", lang); } catch (err) {}
+}
+function toggle() {
+  lang = lang === "en" ? "es" : "en";
+  applyLang();
+}
+document.getElementById("lang").addEventListener("click", toggle);
+document.addEventListener("keydown", function (event) {
+  var key = event.key;
+  if (key === "l" || key === "L") { event.preventDefault(); toggle(); return; }
+  if (key === "ArrowRight" || key === "PageDown" || key === " ") { event.preventDefault(); show(index + 1); }
+  if (key === "ArrowLeft" || key === "PageUp" || key === "Backspace") { event.preventDefault(); show(index - 1); }
+}, true);
+try {
+  if (localStorage.getItem("titanlog-deck-lang") === "es") { lang = "es"; }
+} catch (err) {}
+applyLang();
+show(0);
+</script>
+</body>
+</html>

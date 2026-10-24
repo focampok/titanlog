@@ -42,14 +42,17 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     text = DECK.read_text(encoding="utf-8")
     root = ET.fromstring(text[text.index("<html") :])
     slides = [node for node in root.iter(f"{{{NS}}}section") if "slide" in (node.get("class") or "")]
-    assert len(slides) == 8
+    assert len(slides) == 9
     titles = [slide.find(f"{{{NS}}}h1").get("data-en") for slide in slides]
+    assert titles[titles.index("Results") - 1] == "A forged log line"
     assert titles[-2:] == ["Roadmap", "Glossary"]
 
     parsed = _Links()
     parsed.feed(text)
-    assert parsed.slides == 8
-    assert parsed.urls == ALLOWED_URLS
+    assert parsed.slides == 9
+    external = [url for url in parsed.urls if not url.startswith("data:")]
+    assert external == ALLOWED_URLS
+    assert any(url.startswith("data:image/") for url in parsed.urls)
     assert "Where it fits" in text
     assert "Dónde encaja" in text
     assert "AI-native SOC architecture" in text
@@ -59,7 +62,10 @@ def test_pitch_deck_parses_and_matches_measured_counts() -> None:
     assert "Próximos pasos" in text
     assert "Roadmap, not built." in text
     assert "Model Context Protocol" in text
-    assert "<img" not in text
+    assert "A forged log line" in text
+    assert "Una línea de log falsificada" in text
+    assert "Real OTRF logs with a SIMULATED attacker note and a malformed line." in text
+    assert "Logs reales de OTRF con una nota SIMULADA del atacante y una línea malformada." in text
     leftover = (
         text.replace("http://www.w3.org/2000/svg", "")
         .replace("http://www.w3.org/1999/xhtml", "")

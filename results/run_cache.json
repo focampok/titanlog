@@ -1,5 +1,6 @@
 {
-  "model": "deepseek-flash, Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "model": "deepseek-flash",
+  "provider_host": "api.deepseek.com",
   "event_counts": {
     "events": 4532,
     "alerts": 12,
@@ -268,19 +269,367 @@
       "alerts": 12,
       "incidents": 1
     },
-    "claims": [],
-    "verdicts": [],
-    "severity": null,
-    "close": null,
-    "rationale": null,
-    "gate": null,
-    "model_id": null,
-    "base_url_host": null,
-    "investigation_mode": null,
+    "claims": [
+      {
+        "claim_id": "c1",
+        "claim_type": "encoded_powershell",
+        "statement": "cmd.exe launched an encoded PowerShell command with hidden window and no-profile flags.",
+        "host": "workstation6",
+        "user": "NT AUTHORITY\\SYSTEM",
+        "technique_id": "T1059.001",
+        "row_id": "8d9e73b04109c91ad715d21d08561529f20023fad5f0c3a9feeb1b423f44db24",
+        "field": "process_command_line",
+        "expected_value_substring": "-enc",
+        "confidence": 0.95
+      },
+      {
+        "claim_id": "c2",
+        "claim_type": "encoded_powershell",
+        "statement": "powershell.exe executed an encoded command spawned by cmd.exe.",
+        "host": "workstation6",
+        "user": "NT AUTHORITY\\SYSTEM",
+        "technique_id": "T1059.001",
+        "row_id": "de66f5114a908080697432922e1a7282d64124ccc0e301ec39711787cb85eea7",
+        "field": "process_command_line",
+        "expected_value_substring": "-enc",
+        "confidence": 0.95
+      },
+      {
+        "claim_id": "c3",
+        "claim_type": "service_installed",
+        "statement": "Service 'Updater' was installed with a path that launches encoded PowerShell.",
+        "host": "workstation6",
+        "user": "pgustavo",
+        "technique_id": "T1569.002",
+        "row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+        "field": "service_path",
+        "expected_value_substring": "-enc",
+        "confidence": 0.9
+      },
+      {
+        "claim_id": "c4",
+        "claim_type": "process_executed",
+        "statement": "cmd.exe executed with encoded PowerShell command line under machine account.",
+        "host": "workstation6",
+        "user": "WORKSTATION6$",
+        "technique_id": "T1059.001",
+        "row_id": "5d8fbe5764d5af86c9a2061f633473945dc27bda91d672af16b4260fced1f079",
+        "field": "process_command_line",
+        "expected_value_substring": "-enc",
+        "confidence": 0.9
+      },
+      {
+        "claim_id": "c5",
+        "claim_type": "encoded_powershell",
+        "statement": "powershell.exe executed encoded command under machine account.",
+        "host": "workstation6",
+        "user": "WORKSTATION6$",
+        "technique_id": "T1059.001",
+        "row_id": "54e162f50cf48e7eef7f7ef31bc381c3afcab44472160a39b264f4ae12b7b41c",
+        "field": "process_command_line",
+        "expected_value_substring": "-enc",
+        "confidence": 0.9
+      },
+      {
+        "claim_id": "c6",
+        "claim_type": "service_installed",
+        "statement": "Service 'Updater' installed with encoded PowerShell launch path.",
+        "host": "workstation6",
+        "user": null,
+        "technique_id": "T1569.002",
+        "row_id": "3744e1b9d3eb5a1ca2e7c51a6483081f023da1652703b704739e6e8fc844da51",
+        "field": "service_path",
+        "expected_value_substring": "-enc",
+        "confidence": 0.9
+      },
+      {
+        "claim_id": "c7",
+        "claim_type": "process_executed",
+        "statement": "rundll32.exe executed comsvcs.dll MiniDump to dump LSASS memory to a temp file.",
+        "host": "workstation5",
+        "user": "wardog",
+        "technique_id": "T1003.001",
+        "row_id": "33593144f7f1acc246c3f61b9d864921639d0d8fa56ad80c5387824b71587c41",
+        "field": "process_command_line",
+        "expected_value_substring": "comsvcs.dll MiniDump",
+        "confidence": 0.95
+      },
+      {
+        "claim_id": "c8",
+        "claim_type": "lsass_access",
+        "statement": "Process accessed lsass.exe with granted access 0x1fffff.",
+        "host": "workstation5",
+        "user": null,
+        "technique_id": "T1003.001",
+        "row_id": "7b0fe960b808d785f8a3d8ccbf4990f1fba1e63b11f3a4cf69c7d66519cae436",
+        "field": "granted_access",
+        "expected_value_substring": "0x1fffff",
+        "confidence": 0.9
+      },
+      {
+        "claim_id": "c9",
+        "claim_type": "lsass_access",
+        "statement": "Process accessed lsass.exe with granted access 0x1410.",
+        "host": "workstation5",
+        "user": null,
+        "technique_id": "T1003.001",
+        "row_id": "0be95ee14dab527b04d60d77b39fc1d43ce1bc077557505cf1ad533a849ac101",
+        "field": "granted_access",
+        "expected_value_substring": "0x1410",
+        "confidence": 0.85
+      },
+      {
+        "claim_id": "c10",
+        "claim_type": "process_executed",
+        "statement": "rundll32.exe spawned by powershell.exe executed comsvcs.dll MiniDump against LSASS.",
+        "host": "workstation5",
+        "user": "WORKSTATION5\\wardog",
+        "technique_id": "T1003.001",
+        "row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+        "field": "process_command_line",
+        "expected_value_substring": "comsvcs.dll MiniDump",
+        "confidence": 0.95
+      }
+    ],
+    "verdicts": [
+      {
+        "claim_id": "c1",
+        "status": "VERIFIED",
+        "reason": "Command line or service path contains an encoded PowerShell marker."
+      },
+      {
+        "claim_id": "c2",
+        "status": "VERIFIED",
+        "reason": "Command line or service path contains an encoded PowerShell marker."
+      },
+      {
+        "claim_id": "c3",
+        "status": "VERIFIED",
+        "reason": "Event 4697 service name or path contains the cited text."
+      },
+      {
+        "claim_id": "c4",
+        "status": "VERIFIED",
+        "reason": "Event 4688 image or command line contains the cited text."
+      },
+      {
+        "claim_id": "c5",
+        "status": "VERIFIED",
+        "reason": "Command line or service path contains an encoded PowerShell marker."
+      },
+      {
+        "claim_id": "c6",
+        "status": "VERIFIED",
+        "reason": "Event 7045 service name or path contains the cited text."
+      },
+      {
+        "claim_id": "c7",
+        "status": "VERIFIED",
+        "reason": "Event 4688 image or command line contains the cited text."
+      },
+      {
+        "claim_id": "c8",
+        "status": "VERIFIED",
+        "reason": "Event 10 targets lsass with dangerous granted access."
+      },
+      {
+        "claim_id": "c9",
+        "status": "VERIFIED",
+        "reason": "Event 10 targets lsass with dangerous granted access."
+      },
+      {
+        "claim_id": "c10",
+        "status": "VERIFIED",
+        "reason": "Event 1 image or command line contains the cited text."
+      }
+    ],
+    "severity": "HIGH",
+    "close": false,
+    "rationale": "Verified evidence of suspicious activity. The incident stays open.",
+    "gate": {
+      "level": "APPROVE",
+      "action": "disable_account",
+      "reason": "Verified evidence supports disabling the account. A human approves this action."
+    },
+    "model_id": "deepseek-flash",
+    "base_url_host": "api.deepseek.com",
+    "investigation_mode": "titan",
     "llm_fallback": false
   },
-  "claims": [],
-  "verdicts": [],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "claim_type": "encoded_powershell",
+      "statement": "cmd.exe launched an encoded PowerShell command with hidden window and no-profile flags.",
+      "host": "workstation6",
+      "user": "NT AUTHORITY\\SYSTEM",
+      "technique_id": "T1059.001",
+      "row_id": "8d9e73b04109c91ad715d21d08561529f20023fad5f0c3a9feeb1b423f44db24",
+      "field": "process_command_line",
+      "expected_value_substring": "-enc",
+      "confidence": 0.95
+    },
+    {
+      "claim_id": "c2",
+      "claim_type": "encoded_powershell",
+      "statement": "powershell.exe executed an encoded command spawned by cmd.exe.",
+      "host": "workstation6",
+      "user": "NT AUTHORITY\\SYSTEM",
+      "technique_id": "T1059.001",
+      "row_id": "de66f5114a908080697432922e1a7282d64124ccc0e301ec39711787cb85eea7",
+      "field": "process_command_line",
+      "expected_value_substring": "-enc",
+      "confidence": 0.95
+    },
+    {
+      "claim_id": "c3",
+      "claim_type": "service_installed",
+      "statement": "Service 'Updater' was installed with a path that launches encoded PowerShell.",
+      "host": "workstation6",
+      "user": "pgustavo",
+      "technique_id": "T1569.002",
+      "row_id": "3606c53edceeae5201911ed12909fd253c21fadc168b61a507ed6b11d6e8d6c5",
+      "field": "service_path",
+      "expected_value_substring": "-enc",
+      "confidence": 0.9
+    },
+    {
+      "claim_id": "c4",
+      "claim_type": "process_executed",
+      "statement": "cmd.exe executed with encoded PowerShell command line under machine account.",
+      "host": "workstation6",
+      "user": "WORKSTATION6$",
+      "technique_id": "T1059.001",
+      "row_id": "5d8fbe5764d5af86c9a2061f633473945dc27bda91d672af16b4260fced1f079",
+      "field": "process_command_line",
+      "expected_value_substring": "-enc",
+      "confidence": 0.9
+    },
+    {
+      "claim_id": "c5",
+      "claim_type": "encoded_powershell",
+      "statement": "powershell.exe executed encoded command under machine account.",
+      "host": "workstation6",
+      "user": "WORKSTATION6$",
+      "technique_id": "T1059.001",
+      "row_id": "54e162f50cf48e7eef7f7ef31bc381c3afcab44472160a39b264f4ae12b7b41c",
+      "field": "process_command_line",
+      "expected_value_substring": "-enc",
+      "confidence": 0.9
+    },
+    {
+      "claim_id": "c6",
+      "claim_type": "service_installed",
+      "statement": "Service 'Updater' installed with encoded PowerShell launch path.",
+      "host": "workstation6",
+      "user": null,
+      "technique_id": "T1569.002",
+      "row_id": "3744e1b9d3eb5a1ca2e7c51a6483081f023da1652703b704739e6e8fc844da51",
+      "field": "service_path",
+      "expected_value_substring": "-enc",
+      "confidence": 0.9
+    },
+    {
+      "claim_id": "c7",
+      "claim_type": "process_executed",
+      "statement": "rundll32.exe executed comsvcs.dll MiniDump to dump LSASS memory to a temp file.",
+      "host": "workstation5",
+      "user": "wardog",
+      "technique_id": "T1003.001",
+      "row_id": "33593144f7f1acc246c3f61b9d864921639d0d8fa56ad80c5387824b71587c41",
+      "field": "process_command_line",
+      "expected_value_substring": "comsvcs.dll MiniDump",
+      "confidence": 0.95
+    },
+    {
+      "claim_id": "c8",
+      "claim_type": "lsass_access",
+      "statement": "Process accessed lsass.exe with granted access 0x1fffff.",
+      "host": "workstation5",
+      "user": null,
+      "technique_id": "T1003.001",
+      "row_id": "7b0fe960b808d785f8a3d8ccbf4990f1fba1e63b11f3a4cf69c7d66519cae436",
+      "field": "granted_access",
+      "expected_value_substring": "0x1fffff",
+      "confidence": 0.9
+    },
+    {
+      "claim_id": "c9",
+      "claim_type": "lsass_access",
+      "statement": "Process accessed lsass.exe with granted access 0x1410.",
+      "host": "workstation5",
+      "user": null,
+      "technique_id": "T1003.001",
+      "row_id": "0be95ee14dab527b04d60d77b39fc1d43ce1bc077557505cf1ad533a849ac101",
+      "field": "granted_access",
+      "expected_value_substring": "0x1410",
+      "confidence": 0.85
+    },
+    {
+      "claim_id": "c10",
+      "claim_type": "process_executed",
+      "statement": "rundll32.exe spawned by powershell.exe executed comsvcs.dll MiniDump against LSASS.",
+      "host": "workstation5",
+      "user": "WORKSTATION5\\wardog",
+      "technique_id": "T1003.001",
+      "row_id": "0f987a437a49a7417717d8afec64a2737b9d7279dedd0bb9503511fa71d5b744",
+      "field": "process_command_line",
+      "expected_value_substring": "comsvcs.dll MiniDump",
+      "confidence": 0.95
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "c1",
+      "status": "VERIFIED",
+      "reason": "Command line or service path contains an encoded PowerShell marker."
+    },
+    {
+      "claim_id": "c2",
+      "status": "VERIFIED",
+      "reason": "Command line or service path contains an encoded PowerShell marker."
+    },
+    {
+      "claim_id": "c3",
+      "status": "VERIFIED",
+      "reason": "Event 4697 service name or path contains the cited text."
+    },
+    {
+      "claim_id": "c4",
+      "status": "VERIFIED",
+      "reason": "Event 4688 image or command line contains the cited text."
+    },
+    {
+      "claim_id": "c5",
+      "status": "VERIFIED",
+      "reason": "Command line or service path contains an encoded PowerShell marker."
+    },
+    {
+      "claim_id": "c6",
+      "status": "VERIFIED",
+      "reason": "Event 7045 service name or path contains the cited text."
+    },
+    {
+      "claim_id": "c7",
+      "status": "VERIFIED",
+      "reason": "Event 4688 image or command line contains the cited text."
+    },
+    {
+      "claim_id": "c8",
+      "status": "VERIFIED",
+      "reason": "Event 10 targets lsass with dangerous granted access."
+    },
+    {
+      "claim_id": "c9",
+      "status": "VERIFIED",
+      "reason": "Event 10 targets lsass with dangerous granted access."
+    },
+    {
+      "claim_id": "c10",
+      "status": "VERIFIED",
+      "reason": "Event 1 image or command line contains the cited text."
+    }
+  ],
   "afcr_table": {
     "model_id": "deepseek-flash",
     "provider_host": "api.deepseek.com",
@@ -740,10 +1089,14 @@
       }
     ]
   },
-  "gate": null,
+  "gate": {
+    "level": "APPROVE",
+    "action": "disable_account",
+    "reason": "Verified evidence supports disabling the account. A human approves this action."
+  },
   "version": "0.1.0",
-  "saved_at": "2026-10-24T19:29:01.963259+00:00",
+  "saved_at": "2026-10-24T19:32:30.142196+00:00",
   "timestamps": {
-    "saved_at": "2026-10-24T19:29:01.963259+00:00"
+    "saved_at": "2026-10-24T19:32:30.142196+00:00"
   }
 }

@@ -14,7 +14,7 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from cache import load_run, payload_from_incident, save_run
+from cache import investigation_view, load_run, payload_from_incident, save_run
 from correlate import correlate
 from detectors import detect
 from ingest import REASONS, ingest_file, load_dir
@@ -79,13 +79,6 @@ counts = st.columns(2)
 counts[0].metric("total_events", len(frame))
 counts[1].metric("files", file_count)
 
-_VERDICT_LABELS = {
-    "VERIFIED": "VERIFIED",
-    "REJECTED": "REFUTED",
-    "UNVERIFIABLE": "INSUFFICIENT",
-}
-
-
 def _ratio(closed: object, trials: object) -> str:
     if closed is None or trials is None:
         return "n/a"
@@ -133,73 +126,45 @@ def _show_cached_run(cache: dict) -> None:
     else:
         st.info("The cache has no AFCR summary.")
 
-    claims = cache.get("claims") or []
-    verdicts = {
-        item.get("claim_id"): item.get("status")
-        for item in (cache.get("verdicts") or [])
-        if isinstance(item, dict)
-    }
-    st.subheader("Cached claims")
-    if claims:
-        st.dataframe(
-            pd.DataFrame(
-                [
-                    {
-                        "Claim": claim.get("statement") or "",
-                        "Verdict": _VERDICT_LABELS.get(verdicts.get(claim.get("claim_id"), ""), "INSUFFICIENT"),
-                        "Evidence row id": claim.get("row_id") or "",
-                    }
-                    for claim in claims
-                    if isinstance(claim, dict)
-                ]
-            ),
-            hide_index=True,
-        )
-    else:
-        st.info("No cached claims.")
-    gate = cache.get("gate")
-    if isinstance(gate, dict) and gate.get("level"):
-        st.write(f"Gate: {gate.get('level')}. {gate.get('reason') or ''}")
+    _show_investigation_view(investigation_view(cache))
 
 
-def _show_investigation(result) -> None:
+def _show_investigation_view(view: dict) -> None:
+    model = view.get("model") or ""
+    host = view.get("provider_host") or ""
+    if model or host:
+        st.caption(f"Model: {model} ({host})" if host else f"Model: {model}")
+
     st.subheader("Narrative")
-    narrative = [
-        claim.statement
-        for claim in result.claims
-        if claim.claim_type.value != "attack_technique" and claim.statement
-    ]
+    narrative = view.get("narrative") or []
     if narrative:
         for statement in narrative:
             st.write(statement)
-    elif result.rationale:
-        st.write(result.rationale)
+    elif view.get("rationale"):
+        st.write(view["rationale"])
     else:
         st.info("No narrative was returned.")
 
     st.subheader("ATT&CK")
-    techniques = [claim for claim in result.claims if claim.claim_type.value == "attack_technique"]
+    techniques = view.get("techniques") or []
     if techniques:
-        for claim in techniques:
-            label = claim.technique_id or "unknown"
-            st.write(f"{label}: {claim.statement}")
+        for technique in techniques:
+            st.write(f"{technique.get('technique_id') or 'unknown'}: {technique.get('statement') or ''}")
     else:
         st.info("No ATT&CK technique was claimed.")
 
     st.subheader("Claims")
-    verdict_by_id = {verdict.claim_id: verdict.status for verdict in result.verdicts}
-    rows = [
-        {
-            "Claim": claim.statement,
-            "Verdict": _VERDICT_LABELS.get(verdict_by_id.get(claim.claim_id, ""), "INSUFFICIENT"),
-            "Evidence row id": claim.row_id or "",
-        }
-        for claim in result.claims
-    ]
+    rows = view.get("rows") or []
     if rows:
         st.dataframe(pd.DataFrame(rows), hide_index=True)
     else:
         st.info("No claims.")
+    if view.get("gate"):
+        st.write(view["gate"])
+
+
+def _show_investigation(result) -> None:
+    _show_investigation_view(investigation_view(result))
 
 
 if use_cache:
@@ -242,6 +207,10 @@ if incident is not None:
     if use_cache:
         if st.button("Investigate"):
             st.info("Loaded from cache. No model call.")
+            try:
+                _show_investigation_view(investigation_view(load_run()))
+            except (OSError, ValueError, TypeError):
+                st.error("No offline cache was found.")
     elif st.button("Investigate"):
         try:
             with st.spinner("Investigating..."):

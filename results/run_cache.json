@@ -273,7 +273,7 @@
       {
         "claim_id": "c1",
         "claim_type": "encoded_powershell",
-        "statement": "cmd.exe launched an encoded PowerShell command with hidden window and no-profile flags.",
+        "statement": "Encoded PowerShell was executed via cmd.exe with -enc flag.",
         "host": "workstation6",
         "user": "NT AUTHORITY\\SYSTEM",
         "technique_id": "T1059.001",
@@ -285,7 +285,7 @@
       {
         "claim_id": "c2",
         "claim_type": "encoded_powershell",
-        "statement": "powershell.exe executed an encoded command spawned by cmd.exe.",
+        "statement": "PowerShell process launched with encoded command.",
         "host": "workstation6",
         "user": "NT AUTHORITY\\SYSTEM",
         "technique_id": "T1059.001",
@@ -297,7 +297,7 @@
       {
         "claim_id": "c3",
         "claim_type": "service_installed",
-        "statement": "Service 'Updater' was installed with a path that launches encoded PowerShell.",
+        "statement": "Service 'Updater' was installed with a path launching encoded PowerShell.",
         "host": "workstation6",
         "user": "pgustavo",
         "technique_id": "T1569.002",
@@ -309,7 +309,7 @@
       {
         "claim_id": "c4",
         "claim_type": "process_executed",
-        "statement": "cmd.exe executed with encoded PowerShell command line under machine account.",
+        "statement": "cmd.exe spawned encoded PowerShell via service context.",
         "host": "workstation6",
         "user": "WORKSTATION6$",
         "technique_id": "T1059.001",
@@ -320,8 +320,8 @@
       },
       {
         "claim_id": "c5",
-        "claim_type": "encoded_powershell",
-        "statement": "powershell.exe executed encoded command under machine account.",
+        "claim_type": "process_executed",
+        "statement": "PowerShell executed with encoded command under machine account.",
         "host": "workstation6",
         "user": "WORKSTATION6$",
         "technique_id": "T1059.001",
@@ -333,7 +333,7 @@
       {
         "claim_id": "c6",
         "claim_type": "service_installed",
-        "statement": "Service 'Updater' installed with encoded PowerShell launch path.",
+        "statement": "Service 'Updater' installed with encoded PowerShell command line.",
         "host": "workstation6",
         "user": null,
         "technique_id": "T1569.002",
@@ -344,8 +344,8 @@
       },
       {
         "claim_id": "c7",
-        "claim_type": "process_executed",
-        "statement": "rundll32.exe executed comsvcs.dll MiniDump to dump LSASS memory to a temp file.",
+        "claim_type": "lsass_access",
+        "statement": "rundll32.exe used comsvcs.dll MiniDump to dump LSASS memory.",
         "host": "workstation5",
         "user": "wardog",
         "technique_id": "T1003.001",
@@ -380,8 +380,8 @@
       },
       {
         "claim_id": "c10",
-        "claim_type": "process_executed",
-        "statement": "rundll32.exe spawned by powershell.exe executed comsvcs.dll MiniDump against LSASS.",
+        "claim_type": "attack_technique",
+        "statement": "LSASS memory dump via comsvcs.dll MiniDump indicates credential dumping.",
         "host": "workstation5",
         "user": "WORKSTATION5\\wardog",
         "technique_id": "T1003.001",
@@ -415,7 +415,7 @@
       {
         "claim_id": "c5",
         "status": "VERIFIED",
-        "reason": "Command line or service path contains an encoded PowerShell marker."
+        "reason": "Event 4688 image or command line contains the cited text."
       },
       {
         "claim_id": "c6",
@@ -424,8 +424,8 @@
       },
       {
         "claim_id": "c7",
-        "status": "VERIFIED",
-        "reason": "Event 4688 image or command line contains the cited text."
+        "status": "REJECTED",
+        "reason": "Event is not a process-access event (10)."
       },
       {
         "claim_id": "c8",
@@ -440,16 +440,16 @@
       {
         "claim_id": "c10",
         "status": "VERIFIED",
-        "reason": "Event 1 image or command line contains the cited text."
+        "reason": "T1003.001 is supported by verified lsass_access evidence."
       }
     ],
     "severity": "HIGH",
     "close": false,
     "rationale": "Verified evidence of suspicious activity. The incident stays open.",
     "gate": {
-      "level": "APPROVE",
+      "level": "DENY",
       "action": "disable_account",
-      "reason": "Verified evidence supports disabling the account. A human approves this action."
+      "reason": "An evidence claim was rejected. Containment stays blocked."
     },
     "model_id": "deepseek-flash",
     "base_url_host": "api.deepseek.com",
@@ -460,7 +460,7 @@
     {
       "claim_id": "c1",
       "claim_type": "encoded_powershell",
-      "statement": "cmd.exe launched an encoded PowerShell command with hidden window and no-profile flags.",
+      "statement": "Encoded PowerShell was executed via cmd.exe with -enc flag.",
       "host": "workstation6",
       "user": "NT AUTHORITY\\SYSTEM",
       "technique_id": "T1059.001",
@@ -472,7 +472,7 @@
     {
       "claim_id": "c2",
       "claim_type": "encoded_powershell",
-      "statement": "powershell.exe executed an encoded command spawned by cmd.exe.",
+      "statement": "PowerShell process launched with encoded command.",
       "host": "workstation6",
       "user": "NT AUTHORITY\\SYSTEM",
       "technique_id": "T1059.001",
@@ -484,7 +484,7 @@
     {
       "claim_id": "c3",
       "claim_type": "service_installed",
-      "statement": "Service 'Updater' was installed with a path that launches encoded PowerShell.",
+      "statement": "Service 'Updater' was installed with a path launching encoded PowerShell.",
       "host": "workstation6",
       "user": "pgustavo",
       "technique_id": "T1569.002",
@@ -496,7 +496,7 @@
     {
       "claim_id": "c4",
       "claim_type": "process_executed",
-      "statement": "cmd.exe executed with encoded PowerShell command line under machine account.",
+      "statement": "cmd.exe spawned encoded PowerShell via service context.",
       "host": "workstation6",
       "user": "WORKSTATION6$",
       "technique_id": "T1059.001",
@@ -507,8 +507,8 @@
     },
     {
       "claim_id": "c5",
-      "claim_type": "encoded_powershell",
-      "statement": "powershell.exe executed encoded command under machine account.",
+      "claim_type": "process_executed",
+      "statement": "PowerShell executed with encoded command under machine account.",
       "host": "workstation6",
       "user": "WORKSTATION6$",
       "technique_id": "T1059.001",
@@ -520,7 +520,7 @@
     {
       "claim_id": "c6",
       "claim_type": "service_installed",
-      "statement": "Service 'Updater' installed with encoded PowerShell launch path.",
+      "statement": "Service 'Updater' installed with encoded PowerShell command line.",
       "host": "workstation6",
       "user": null,
       "technique_id": "T1569.002",
@@ -531,8 +531,8 @@
     },
     {
       "claim_id": "c7",
-      "claim_type": "process_executed",
-      "statement": "rundll32.exe executed comsvcs.dll MiniDump to dump LSASS memory to a temp file.",
+      "claim_type": "lsass_access",
+      "statement": "rundll32.exe used comsvcs.dll MiniDump to dump LSASS memory.",
       "host": "workstation5",
       "user": "wardog",
       "technique_id": "T1003.001",
@@ -567,8 +567,8 @@
     },
     {
       "claim_id": "c10",
-      "claim_type": "process_executed",
-      "statement": "rundll32.exe spawned by powershell.exe executed comsvcs.dll MiniDump against LSASS.",
+      "claim_type": "attack_technique",
+      "statement": "LSASS memory dump via comsvcs.dll MiniDump indicates credential dumping.",
       "host": "workstation5",
       "user": "WORKSTATION5\\wardog",
       "technique_id": "T1003.001",
@@ -602,7 +602,7 @@
     {
       "claim_id": "c5",
       "status": "VERIFIED",
-      "reason": "Command line or service path contains an encoded PowerShell marker."
+      "reason": "Event 4688 image or command line contains the cited text."
     },
     {
       "claim_id": "c6",
@@ -611,8 +611,8 @@
     },
     {
       "claim_id": "c7",
-      "status": "VERIFIED",
-      "reason": "Event 4688 image or command line contains the cited text."
+      "status": "REJECTED",
+      "reason": "Event is not a process-access event (10)."
     },
     {
       "claim_id": "c8",
@@ -627,7 +627,7 @@
     {
       "claim_id": "c10",
       "status": "VERIFIED",
-      "reason": "Event 1 image or command line contains the cited text."
+      "reason": "T1003.001 is supported by verified lsass_access evidence."
     }
   ],
   "afcr_table": {
@@ -1090,13 +1090,14 @@
     ]
   },
   "gate": {
-    "level": "APPROVE",
+    "level": "DENY",
     "action": "disable_account",
-    "reason": "Verified evidence supports disabling the account. A human approves this action."
+    "reason": "An evidence claim was rejected. Containment stays blocked."
   },
+  "rationale": "Verified evidence of suspicious activity. The incident stays open.",
   "version": "0.1.0",
-  "saved_at": "2026-10-24T19:32:30.142196+00:00",
+  "saved_at": "2026-10-24T19:45:58.668970+00:00",
   "timestamps": {
-    "saved_at": "2026-10-24T19:32:30.142196+00:00"
+    "saved_at": "2026-10-24T19:45:58.668970+00:00"
   }
 }

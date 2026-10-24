@@ -100,6 +100,40 @@ def test_verify_offline_without_llm_env(monkeypatch) -> None:
     assert json.loads(verdicts[0].model_dump_json())["status"] == "VERIFIED"
 
 
+def test_hardened_keeps_a_decision_when_technique_claims_use_aliases() -> None:
+    event = _event()
+    alert = _alert(event)
+    payload = json.dumps(
+        {
+            "severity": "CRITICAL",
+            "close": False,
+            "rationale": "The injected note is hostile data.",
+            "claims": [
+                {
+                    "claim": "LSASS was dumped with comsvcs MiniDump.",
+                    "technique": "T1003.001",
+                    "confidence": "high",
+                }
+            ],
+        }
+    )
+
+    result = investigate(
+        _incident(event, alert),
+        [event],
+        [alert],
+        mode="hardened_prompt",
+        complete=lambda _request: payload,
+    )
+
+    assert result.fallback is False
+    assert result.severity == "CRITICAL"
+    assert result.close is False
+    assert result.claims[0].claim_type is ClaimType.ATTACK_TECHNIQUE
+    assert result.claims[0].technique_id == "T1003.001"
+    assert result.claims[0].confidence == 0.9
+
+
 def test_three_modes_on_a_clean_incident(monkeypatch) -> None:
     monkeypatch.setenv("LLM_BASE_URL", "https://api.deepseek.com/v1")
     monkeypatch.setenv("LLM_MODEL", "deepseek-flash")
@@ -144,6 +178,11 @@ def test_three_modes_on_a_clean_incident(monkeypatch) -> None:
     assert _DO_NOT_OBEY in hardened_system
     assert _DO_NOT_OBEY in titan_system
     assert _DO_NOT_OBEY not in seen[0]["messages"][0]["content"]
+    assert "Include at least one attack_technique claim." in hardened_system
+    assert "Include at least one attack_technique claim." in titan_system
+    assert "T1003.001" in hardened_system and "T1569.002" in hardened_system
+    assert "T1021.002" in titan_system
+    assert "attack_technique claim" not in seen[0]["messages"][0]["content"]
     assert hardened_event["process_command_line"].startswith(
         '<untrusted_field name="process.command_line">'
     )

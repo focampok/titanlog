@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -16,6 +17,7 @@ if str(SRC) not in sys.path:
 
 from cache import investigation_view, load_run, payload_from_incident, save_run
 from correlate import GateRecommendation, correlate
+from demo_forged import NOT_IN_CACHE, review_forged
 from detectors import detect
 from gate import execute, record_audit
 from ingest import REASONS, ingest_file, load_dir
@@ -31,12 +33,55 @@ REASON_LABELS = {
     "huge_field": "Truncated field over 64 KB",
     "non_windows": "Not Windows or Sysmon JSON",
     "json_array": "JSON array instead of JSONL",
+    "impossible_timestamp": "Impossible timestamp",
+    "insufficient_evidence": "Insufficient evidence",
 }
 
 st.set_page_config(page_title="Titan.Log", layout="wide")
 st.title("Titan.Log")
 use_cache = st.sidebar.checkbox("Use cache (offline demo)", value=True)
 st.sidebar.caption("Skips the model and loads the saved run.")
+if st.sidebar.button("Load demo: forged incident"):
+    st.session_state["forged_demo"] = review_forged()
+
+
+def _show_forged(result) -> None:
+    """Render the forged file. Oracle verdicts are computed here. Cache fields are copied or marked missing."""
+    if os.environ.get("DEMO_READONLY") == "1":
+        st.caption("Public demo — cached results; no live LLM")
+    st.subheader("Forged incident")
+    st.caption("SIMULATED")
+    st.write(f"Quarantined: {result.quarantined}")
+    if result.reasons:
+        st.dataframe(
+            [
+                {"Reason": REASON_LABELS.get(reason, reason), "Count": count}
+                for reason, count in result.reasons.items()
+            ],
+            hide_index=True,
+        )
+    if result.insufficient_lines:
+        st.warning(
+            f"Insufficient evidence: {result.insufficient_lines} line missing host, user, and EventID."
+        )
+    for line in result.injections:
+        st.markdown(f"⚠ SIMULATED `{line}`")
+    if result.incident_detected:
+        st.write(f"Incident still detected. Alerts: {result.alert_count}.")
+    else:
+        st.write("Incident not detected.")
+    for label, statement in result.injection_verdicts:
+        st.write(f"{label}: {statement}")
+    st.write(f"close={'true' if result.close else 'false'}")
+    st.write(f"Cached close: {result.cache_close}")
+    st.write(f"Cached claim: {result.cache_claim}")
+    if result.cache_claim == NOT_IN_CACHE or result.cache_close == NOT_IN_CACHE:
+        st.write(NOT_IN_CACHE)
+
+
+forged = st.session_state.get("forged_demo")
+if forged is not None:
+    _show_forged(forged)
 
 
 @st.cache_data(show_spinner=False)

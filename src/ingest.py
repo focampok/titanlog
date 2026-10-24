@@ -14,6 +14,7 @@ from titanlog.adapters.generic_jsonl import (
     event_from_record,
     first_present,
     load_field_map,
+    parse_timestamp,
     resolve_field_map,
 )
 from titanlog.adapters.otrf_sysmon import OtrfSysmonAdapter
@@ -77,7 +78,12 @@ REASONS = (
     "huge_field",
     "non_windows",
     "json_array",
+    "impossible_timestamp",
+    "insufficient_evidence",
 )
+
+# Counted on the report. Not written under data/quarantine/.
+_NOT_QUARANTINED = {"insufficient_evidence"}
 
 COLUMNS = [
     "row_id",
@@ -164,11 +170,31 @@ def _skip_reason(
         return "non_windows", None
     event_code = coerce_event_code(first_present(record, field_map["event.code"]))
     host = first_present(record, field_map["host.name"])
+    user = first_present(record, field_map["user.name"])
+    if event_code is None and host is None and user is None:
+        return "insufficient_evidence", None
     if event_code is None or host is None:
         return "missing_fields", None
     if event_code not in _KNOWN_EVENT_IDS:
         return "unknown_event_id", event_code
+    if _impossible_timestamp(record, field_map):
+        return "impossible_timestamp", None
     return None, None
+
+
+def _impossible_timestamp(
+    record: dict[str, object],
+    field_map: dict[str, tuple[str, ...]],
+) -> bool:
+    """True when a timestamp is present and is not a real datetime."""
+    value = first_present(record, field_map["@timestamp"])
+    if value is None:
+        return False
+    text = str(value).strip()
+    if not text:
+        return False
+    parsed = parse_timestamp(text)
+    return not isinstance(parsed, datetime)
 
 
 def _write_quarantine(
@@ -265,7 +291,8 @@ def ingest_file(
         )
         if reason:
             _bump(reasons, reason)
-            held.setdefault(reason, []).append(raw_line)
+            if reason not in _NOT_QUARANTINED:
+                held.setdefault(reason, []).append(raw_line)
             if unknown_id is not None:
                 unknown.add(unknown_id)
             continue

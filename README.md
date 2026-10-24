@@ -65,3 +65,11 @@ The JSON files under `data/otrf/` come from [OTRF Security-Datasets](https://git
 - Deterministic code: ingest/quarantine, detectors, correlator, Oracle, gate, AFCR math.
 
 Copy `.env.example` to `.env` and fill the key locally. `.env` and `.env.nebius` are gitignored.
+
+## Public demo on Railway
+
+https://titan-log.focampo.com serves this repo read-only.
+
+- Set `DEMO_READONLY=1`.
+- Do not set `LLM_BASE_URL`, `LLM_API_KEY`, or `LLM_MODEL` on the public service.
+- The app reads `results/run_cache.json`. It does not call a model.

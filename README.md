@@ -3,7 +3,8 @@
 A vendor-neutral trust layer for any AI SOC, SOAR, or analyst using an LLM. It sits between the AI SOC verdict and the action.
 
 - Live app (read-only, cached results, no live model): https://titan-log.focampo.com
-- Pitch deck: [pitch/deck.html](pitch/deck.html) · https://info-titan-log.focampo.com/
+- Public page: [pitch/index.html](pitch/index.html) · https://info-titan-log.focampo.com/
+- Pitch deck: [pitch/deck.html](pitch/deck.html)
 - Write-up: [WRITEUP.md](WRITEUP.md)
 
 ## Submission

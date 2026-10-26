@@ -22,6 +22,8 @@ html { scroll-behavior: smooth; scrollbar-color: #4a433a var(--bg); }
 html, body { margin: 0; background: var(--bg); color: var(--text);
   font-family: "Segoe UI", Helvetica, Arial, sans-serif; }
 body { line-height: 1.5; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 :focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; }
 ::selection { background: var(--mark); color: var(--ink); }
 a, button { cursor: pointer; }
@@ -124,7 +126,7 @@ tr.titan td { background: #2a261f; font-weight: 700; }
   <div class="actions">
     <a class="btn btn-compact btn-ghost" href="/" data-en="← Case" data-es="← Caso">← Case</a>
     <button id="lang" type="button">EN | ES</button>
-    <a class="btn btn-compact" href="https://titan-log.focampo.com" target="_blank" rel="noopener noreferrer" data-en="Live demo" data-es="Demo en vivo">Live demo</a>
+    <a class="btn btn-compact" href="https://titan-log.focampo.com" target="_blank" rel="noopener noreferrer"><span data-en="Live demo" data-es="Demo en vivo">Live demo</span><span class="sr-only" data-en=" (opens in a new tab)" data-es=" (se abre en una pestaña nueva)"> (opens in a new tab)</span></a>
   </div>
 </header>
 
@@ -137,10 +139,12 @@ tr.titan td { background: #2a261f; font-weight: 700; }
       <a class="btn" href="https://titan-log.focampo.com" target="_blank" rel="noopener noreferrer">
         <span data-en="Live demo" data-es="Demo en vivo">Live demo</span>
         <span class="btn-host">titan-log.focampo.com</span>
+        <span class="sr-only" data-en=" (opens in a new tab)" data-es=" (se abre en una pestaña nueva)"> (opens in a new tab)</span>
       </a>
       <a class="btn btn-ghost" href="https://github.com/focampok/titanlog" target="_blank" rel="noopener noreferrer">
         <span data-en="Source" data-es="Código">Source</span>
         <span class="btn-host">github.com/focampok/titanlog</span>
+        <span class="sr-only" data-en=" (opens in a new tab)" data-es=" (se abre en una pestaña nueva)"> (opens in a new tab)</span>
       </a>
     </div>
   </div>
@@ -440,8 +444,8 @@ tr.titan td { background: #2a261f; font-weight: 700; }
 
 <section>
   <div class="wrap close">
-    <a href="https://titan-log.focampo.com" target="_blank" rel="noopener noreferrer">https://titan-log.focampo.com</a>
-    <a href="https://github.com/focampok/titanlog" target="_blank" rel="noopener noreferrer">https://github.com/focampok/titanlog</a>
+    <a href="https://titan-log.focampo.com" target="_blank" rel="noopener noreferrer">https://titan-log.focampo.com<span class="sr-only" data-en=" (opens in a new tab)" data-es=" (se abre en una pestaña nueva)"> (opens in a new tab)</span></a>
+    <a href="https://github.com/focampok/titanlog" target="_blank" rel="noopener noreferrer">https://github.com/focampok/titanlog<span class="sr-only" data-en=" (opens in a new tab)" data-es=" (se abre en una pestaña nueva)"> (opens in a new tab)</span></a>
   </div>
 </section>
 </main>

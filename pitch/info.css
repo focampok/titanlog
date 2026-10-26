@@ -643,6 +643,14 @@ svg {
   padding: 2.5rem 0 4rem;
 }
 
+.detalle-layout > * {
+  min-width: 0;
+}
+
+.prose {
+  min-width: 0;
+}
+
 .detalle-nav {
   position: sticky;
   top: 1rem;
@@ -748,6 +756,7 @@ svg {
 }
 
 .table-wrap {
+  max-width: 100%;
   overflow-x: auto;
   margin: 1.25rem 0;
   border: 1px solid var(--line);

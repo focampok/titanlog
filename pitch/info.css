@@ -407,6 +407,24 @@ svg {
   height: auto;
 }
 
+.diagram-wide {
+  display: block;
+}
+
+.diagram-narrow {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .diagram-wide {
+    display: none;
+  }
+
+  .diagram-narrow {
+    display: block;
+  }
+}
+
 .diagram figcaption {
   margin-top: 0.5rem;
   color: var(--muted);

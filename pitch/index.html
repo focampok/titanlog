@@ -79,7 +79,7 @@
         </ol>
 
         <figure class="diagram">
-          <svg viewBox="0 0 760 220" role="img" aria-labelledby="diagram-title diagram-desc" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+          <svg class="diagram-wide" viewBox="0 0 760 220" role="img" aria-labelledby="diagram-title diagram-desc" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
             <title id="diagram-title" data-es="Flujo de verificación de Titan.Log" data-en="Titan.Log verification flow">Flujo de verificación de Titan.Log</title>
             <desc id="diagram-desc" data-es="El veredicto de la IA pasa por el Oracle, que contrasta cada afirmación con el log, y llega a la compuerta de decisión." data-en="The AI verdict goes through the Oracle, which checks each claim against the log, and reaches the decision gate.">El veredicto de la IA pasa por el Oracle, que contrasta cada afirmación con el log, y llega a la compuerta de decisión.</desc>
             <g fill="#8B6914" font-size="13" font-weight="700">
@@ -109,6 +109,38 @@
             <g fill="#8B6914">
               <path d="M272 110l-10-6v12z"/>
               <path d="M536 110l-10-6v12z"/>
+            </g>
+          </svg>
+          <svg class="diagram-narrow" viewBox="0 0 360 440" role="img" aria-labelledby="diagram-title-m diagram-desc-m" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+            <title id="diagram-title-m" data-es="Flujo de verificación de Titan.Log" data-en="Titan.Log verification flow">Flujo de verificación de Titan.Log</title>
+            <desc id="diagram-desc-m" data-es="El veredicto de la IA pasa por el Oracle y llega a la compuerta de decisión." data-en="The AI verdict goes through the Oracle and reaches the decision gate.">El veredicto de la IA pasa por el Oracle y llega a la compuerta de decisión.</desc>
+            <g fill="#8B6914" font-size="12" font-weight="700">
+              <text x="20" y="24">01</text>
+              <text x="20" y="174">02</text>
+              <text x="20" y="324">03</text>
+            </g>
+            <g fill="#ffffff" stroke="#8B6914" stroke-width="2">
+              <rect x="20" y="34" width="320" height="90" rx="12"/>
+              <rect x="20" y="184" width="320" height="90" rx="12"/>
+              <rect x="20" y="334" width="320" height="90" rx="12"/>
+            </g>
+            <g fill="#111827" font-size="16" font-weight="600" text-anchor="middle">
+              <text x="180" y="72" data-es="Veredicto de IA" data-en="AI verdict">Veredicto de IA</text>
+              <text x="180" y="222" data-es="Oracle" data-en="Oracle">Oracle</text>
+              <text x="180" y="372" data-es="Compuerta" data-en="Gate">Compuerta</text>
+            </g>
+            <g fill="#4B5563" font-size="13" text-anchor="middle">
+              <text x="180" y="99" data-es="Con afirmaciones" data-en="With claims">Con afirmaciones</text>
+              <text x="180" y="249" data-es="Contra el log crudo" data-en="Against the raw log">Contra el log crudo</text>
+              <text x="180" y="399" data-es="Cierra, escala o deniega" data-en="Closes, escalates or denies">Cierra, escala o deniega</text>
+            </g>
+            <g fill="none" stroke="#8B6914" stroke-width="2">
+              <path d="M180 124v24"/>
+              <path d="M180 274v24"/>
+            </g>
+            <g fill="#8B6914">
+              <path d="M180 154l-6-10h12z"/>
+              <path d="M180 304l-6-10h12z"/>
             </g>
           </svg>
           <figcaption data-es="Cada afirmación se contrasta antes de que la compuerta actúe." data-en="Every claim is checked before the gate acts.">Cada afirmación se contrasta antes de que la compuerta actúe.</figcaption>

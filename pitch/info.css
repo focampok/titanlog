@@ -407,20 +407,20 @@ svg {
   height: auto;
 }
 
-.diagram-wide {
+.diagram svg.diagram-wide {
   display: block;
 }
 
-.diagram-narrow {
+.diagram svg.diagram-narrow {
   display: none;
 }
 
 @media (max-width: 760px) {
-  .diagram-wide {
+  .diagram svg.diagram-wide {
     display: none;
   }
 
-  .diagram-narrow {
+  .diagram svg.diagram-narrow {
     display: block;
   }
 }
